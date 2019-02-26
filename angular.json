@@ -30,7 +30,10 @@
               "node_modules/semantic-ui/dist/semantic.min.css",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/semantic-ui/dist/semantic.min.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {

@@ -1,3 +1,22 @@
 :host {
   flex: 1;
+  padding: 2em;
+}
+
+.image {
+  img {
+    border-radius: 4px !important;
+  }
+}
+
+.content {
+  padding-top: 0.5em !important;
+}
+
+.input {
+  flex: 1;
+}
+
+.mr {
+  margin-right: 1em;
 }

@@ -23,8 +23,12 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     width: 1024,
     height: 768,
-    webPreferences: { webSecurity: false },
-    frame: false
+    frame: false,
+    webPreferences: {
+      webSecurity: false,
+      nodeIntegration: false,
+      allowRunningInsecureContent: false
+    }
   });
 
   let loadUrl = {};
