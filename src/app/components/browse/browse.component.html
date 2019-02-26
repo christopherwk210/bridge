@@ -8,10 +8,30 @@
     Advanced Search
   </button>
 
-  <div class="ui icon buttons">
-    <button data-content="View results in detail" class="ui button" (click)="viewMode = 'details'" [class.active]="viewMode === 'details'"><i class="th list icon"></i></button>
-    <button data-content="View results in a grid" class="ui button" (click)="viewMode = 'grid'" [class.active]="viewMode === 'grid'"><i class="th icon"></i></button>
+  <div class="ui icon buttons mr">
+    <button #uiDetailBtn data-content="View results in detail" data-position="bottom center" class="ui button" (click)="viewMode = 'details'" [class.active]="viewMode === 'details'"><i class="th list icon"></i></button>
+    <button #uiGridBtn data-content="View results in a grid" data-position="bottom center" class="ui button" (click)="viewMode = 'grid'" [class.active]="viewMode === 'grid'"><i class="th icon"></i></button>
   </div>
+
+  <div #uiSortDropdown class="ui selection dropdown mr">
+    <input type="hidden" name="sort" value="0">
+    <i class="dropdown icon"></i>
+    <div class="default text"></div>
+    <div class="menu">
+      <div class="item" data-value="0">Newest First</div>
+      <div class="item" data-value="1">Oldest First</div>
+      <div class="item" data-value="2">By Song Name</div>
+      <div class="item" data-value="3">By Song Name Reversed</div>
+      <div class="item" data-value="4">By Artist Name</div>
+      <div class="item" data-value="5">By Artist Name Reversed</div>
+      <div class="item" data-value="6">By Album Name</div>
+      <div class="item" data-value="7">By Album Name Reversed</div>
+    </div>
+  </div>
+
+  <button #uiRandomBtn data-content="Randomize!" data-position="bottom right" class="ui icon button">
+    <i class="question icon"></i>
+  </button>
 </div>
 
 <div class="ui items">
