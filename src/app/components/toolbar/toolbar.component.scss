@@ -1,0 +1,8 @@
+.menu {
+  -webkit-app-region: drag;
+
+  .item, .item * {
+    -webkit-app-region: no-drag;
+    cursor: default !important;
+  }
+}

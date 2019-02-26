@@ -1,7 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-const routes: Routes = [];
+import { BrowseComponent } from './components/browse/browse.component';
+
+const routes: Routes = [
+  {
+    component: BrowseComponent,
+    path: ''
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
