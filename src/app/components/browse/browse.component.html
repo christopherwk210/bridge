@@ -9,6 +9,7 @@
   </button>
 
   <div class="ui icon buttons mr">
+    <button #uiCompactBtn data-content="View compact results" data-position="bottom center" class="ui button" (click)="viewMode = 'compact'" [class.active]="viewMode === 'compact'"><i class="list icon"></i></button>
     <button #uiDetailBtn data-content="View results in detail" data-position="bottom center" class="ui button" (click)="viewMode = 'details'" [class.active]="viewMode === 'details'"><i class="th list icon"></i></button>
     <button #uiGridBtn data-content="View results in a grid" data-position="bottom center" class="ui button" (click)="viewMode = 'grid'" [class.active]="viewMode === 'grid'"><i class="th icon"></i></button>
   </div>
@@ -20,12 +21,14 @@
     <div class="menu">
       <div class="item" data-value="0">Newest First</div>
       <div class="item" data-value="1">Oldest First</div>
-      <div class="item" data-value="2">By Song Name</div>
-      <div class="item" data-value="3">By Song Name Reversed</div>
-      <div class="item" data-value="4">By Artist Name</div>
-      <div class="item" data-value="5">By Artist Name Reversed</div>
-      <div class="item" data-value="6">By Album Name</div>
-      <div class="item" data-value="7">By Album Name Reversed</div>
+      <div class="item" data-value="2">By Song Name (Ascending)</div>
+      <div class="item" data-value="3">By Song Name (Descending)</div>
+      <div class="item" data-value="4">By Artist Name (Ascending)</div>
+      <div class="item" data-value="5">By Artist Name (Descending)</div>
+      <div class="item" data-value="6">By Album Name (Ascending)</div>
+      <div class="item" data-value="7">By Album Name (Descending)</div>
+      <div class="item" data-value="8">By Difficulty (Ascending)</div>
+      <div class="item" data-value="9">By Difficulty (Descending)</div>
     </div>
   </div>
 
@@ -34,22 +37,43 @@
   </button>
 </div>
 
-<div class="ui items">
+<div class="ui items" *ngIf="viewMode === 'compact'">
+  <div class="item" *ngFor="let song of currentResults">
+    <div class="content">
+      <span class="header">{{song.name}}</span>
+      <div class="meta">
+        <span><strong>{{song.artist}}</strong> <span *ngIf="song.album">- {{song.album}}</span> <span *ngIf="song.year">({{song.year}})</span></span>
+      </div>
+      <div class="description">
+        <p></p>
+      </div>
+      <div class="extra">
+        <button class="ui teal button">Add to library</button>
+        <button class="ui teal button">Details</button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+
+<div class="ui items" *ngIf="viewMode === 'details'">
   <div class="item" *ngFor="let song of currentResults">
     <div class="image">
-      <img *ngIf="song.directLinks['album.png']" [src]="song.directLinks['album.png']">
-      <img style="opacity: 0.5" *ngIf="!song.directLinks['album.png']" src="/assets/images/placeholder.jpg">
+      <div class="album-img" *ngIf="song.directLinks['album.png']" [style.opacity]="song.imageLoaded ? 1 : 0" [style.backgroundImage]="'url(' + song.directLinks['album.png'] + ')'"></div>
+      <img style="display: none" *ngIf="song.directLinks['album.png']" [src]="song.directLinks['album.png']" (load)="song.imageLoaded = true">
+      <img class="placeholder-image" src="/assets/images/placeholder.jpg">
     </div>
     <div class="content">
       <span class="header">{{song.name}}</span>
       <div class="meta">
-        <span>{{song.artist}} - {{song.album}} ({{song.year}})</span>
+        <span><strong>{{song.artist}}</strong> <span *ngIf="song.album">- {{song.album}}</span> <span *ngIf="song.year">({{song.year}})</span></span>
       </div>
       <div class="description">
-        <p>test</p>
+        <p></p>
       </div>
       <div class="extra">
-        test 2
+        <button class="ui teal button">Add to library</button>
+        <button class="ui teal button">Details</button>
       </div>
     </div>
   </div>

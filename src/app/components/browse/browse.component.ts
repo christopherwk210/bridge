@@ -21,6 +21,7 @@ enum SortType {
   styleUrls: ['./browse.component.scss']
 })
 export class BrowseComponent implements OnInit, AfterViewInit {
+  @ViewChild('uiCompactBtn') uiCompactBtn: ElementRef;
   @ViewChild('uiDetailBtn') uiDetailBtn: ElementRef;
   @ViewChild('uiGridBtn') uiGridBtn: ElementRef;
   @ViewChild('uiRandomBtn') uiRandomBtn: ElementRef;
@@ -28,7 +29,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
   currentResults: SongResult[];
   sortType: SortType = SortType.NEWEST;
-  viewMode: 'details' | 'grid' = 'details';
+  viewMode: 'details' | 'grid' | 'compact' = 'details';
 
   constructor(private api: ApiService) {
 
@@ -42,6 +43,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     [
       this.uiDetailBtn.nativeElement,
       this.uiGridBtn.nativeElement,
+      this.uiCompactBtn.nativeElement,
       this.uiRandomBtn.nativeElement
     ].forEach(element => {
       $(element).popup();

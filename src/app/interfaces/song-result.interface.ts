@@ -47,4 +47,7 @@ export interface SongResult {
   hasStems: boolean;
   hasTap: boolean;
   hasVideo: boolean;
+
+  /** Added metadata */
+  imageLoaded: boolean;
 }
