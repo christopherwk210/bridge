@@ -32,9 +32,13 @@
     </div>
   </div>
 
-  <button #uiRandomBtn data-content="Randomize!" data-position="bottom right" class="ui icon button">
+  <button #uiRandomBtn data-content="Randomize!" data-position="bottom right" class="ui icon button" (click)="randomize()">
     <i class="question icon"></i>
   </button>
+</div>
+
+<div class="ui active inverted dimmer" [style.display]="loading ? 'flex' : 'none'">
+  <div class="ui medium text loader">Loading...</div>
 </div>
 
 <div class="ui items" *ngIf="viewMode === 'compact'">
@@ -54,7 +58,6 @@
     </div>
   </div>
 </div>
-  
 
 <div class="ui items" *ngIf="viewMode === 'details'">
   <div class="item" *ngFor="let song of currentResults">

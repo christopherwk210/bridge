@@ -28,6 +28,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   @ViewChild('uiSortDropdown') uiSortDropdown: ElementRef;
 
   currentResults: SongResult[];
+  loading = true;
   sortType: SortType = SortType.NEWEST;
   viewMode: 'details' | 'grid' | 'compact' = 'details';
 
@@ -56,14 +57,23 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.setSort(this.sortType);
   }
 
+  async randomize() {
+    this.currentResults = [];
+    this.loading = true;
+    const result = await this.api.getRandom();
+    this.currentResults = result.songs;
+    this.loading = false;
+  }
+
   setSort(value: SortType) {
     $(this.uiSortDropdown.nativeElement).dropdown('set selected', value);
   }
 
   async loadLatestData() {
+    this.currentResults = [];
     const result = await this.api.getLatest();
     this.currentResults = result.songs;
-    console.log(result);
+    this.loading = false;
   }
 
 }

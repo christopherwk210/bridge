@@ -21,4 +21,17 @@ export class ApiService {
       );
     });
   }
+
+  getRandom(): Promise<any> {
+    return new Promise(resolve => {
+      let result;
+      this.http.get(`${this.url}/random`).subscribe(
+        success => result = success,
+        err => result = err,
+        () => {
+          resolve(result);
+        }
+      );
+    });
+  }
 }
