@@ -7,3 +7,17 @@
     cursor: default !important;
   }
 }
+
+.traffic-light {
+  &:before {
+    display: none !important;
+  }
+
+  i {
+    margin: 0 !important;
+  }
+
+  &:last-child:hover {
+    background: rgba(255,0,0,.1) !important;
+  }
+}

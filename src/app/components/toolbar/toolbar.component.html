@@ -1,10 +1,11 @@
 <div class="ui top fixed menu">
-  <div class="item">
-    <strong>bridge</strong>
-  </div>
   <a class="item" [class.active]="currentRoute === ''" (click)="router.navigate(['/'])">Browse</a>
   <a class="item" [class.active]="currentRoute === 'downloads'" (click)="router.navigate(['/downloads'])">Downloads</a>
   <a class="item" [class.active]="currentRoute === 'library'" (click)="router.navigate(['/library'])">Library</a>
   <a class="item" [class.active]="currentRoute === 'settings'" (click)="router.navigate(['/settings'])">Settings</a>
-  <a class="item" [class.active]="currentRoute === 'about'" (click)="router.navigate(['/about'])">About</a>
+  <a class="item" [class.active]="currentRoute === 'about'" (click)="router.navigate(['/about'])" style="margin-right:auto;">About</a>
+
+  <a class="item traffic-light" (click)="minus()"><i class="minus icon"></i></a>
+  <a class="item traffic-light" (click)="plus()"><i class="plus icon"></i></a>
+  <a class="item traffic-light" (click)="x()"><i class="x icon"></i></a>
 </div>

@@ -30,7 +30,10 @@ function createWindow () {
       webSecurity: false,
       allowRunningInsecureContent: false
     },
-    show: false
+    show: false,
+    title: 'bridge',
+    simpleFullscreen: true,
+    fullscreenable: false
   });
 
   let loadUrl = {};
@@ -62,7 +65,9 @@ function createWindow () {
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
     mainWindow = null
-  })
+  });
+
+  mainWindow.setMenu(null);
 }
 
 /**

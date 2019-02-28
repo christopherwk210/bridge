@@ -7,3 +7,5 @@ Add a way to clear cache of temp data (images downloaded when browsing)
 Add "Load more latest songs" and "Load more random songs" to bottom of browse scroll
 
 Add handling of failed to reach api
+
+Add progress bar to bottom of "downloads" toolbar button to show overall progress of all downloads
