@@ -5,3 +5,7 @@
   height: 100%;
   overflow: hidden;
 }
+
+.fade-out {
+  animation: fade-out 1s linear forwards;
+}

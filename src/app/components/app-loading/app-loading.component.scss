@@ -1,0 +1,23 @@
+:host {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  -webkit-app-region: drag;
+  z-index: 9001;
+
+  background-color: white;
+}
+
+.logo {
+  width: 400px;
+  animation: fade-in 2s ease forwards;
+  opacity: 0;
+}

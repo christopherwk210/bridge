@@ -4,18 +4,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
 import { ApiService } from './services/api.service';
+import { RemoteService } from './services/remote.service';
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { BrowseComponent } from './components/browse/browse.component';
 import { ChartItemComponent } from './components/chart-item/chart-item.component';
+import { AppLoadingComponent } from './components/app-loading/app-loading.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
     BrowseComponent,
-    ChartItemComponent
+    ChartItemComponent,
+    AppLoadingComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +26,8 @@ import { ChartItemComponent } from './components/chart-item/chart-item.component
     HttpClientModule
   ],
   providers: [
-    ApiService
+    ApiService,
+    RemoteService
   ],
   bootstrap: [AppComponent]
 })

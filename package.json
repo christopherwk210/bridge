@@ -24,6 +24,7 @@
     "rxjs": "~6.3.3",
     "semantic-ui": "^2.4.2",
     "tslib": "^1.9.0",
+    "vivus": "^0.4.4",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

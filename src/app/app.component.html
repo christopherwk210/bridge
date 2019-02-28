@@ -1,2 +1,6 @@
-<app-toolbar></app-toolbar>
-<router-outlet></router-outlet>
+<ng-container *ngIf="!appLoading">
+  <app-toolbar></app-toolbar>
+  <router-outlet></router-outlet>    
+</ng-container>
+
+<app-app-loading *ngIf="!hideLoader" [class.fade-out]="!appLoading" (done)="onLoad()"></app-app-loading>

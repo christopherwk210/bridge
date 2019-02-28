@@ -24,12 +24,13 @@ function createWindow () {
     width: 1024,
     height: 768,
     minWidth: 910,
+    minHeight: 500,
     frame: false,
     webPreferences: {
       webSecurity: false,
-      nodeIntegration: false,
       allowRunningInsecureContent: false
-    }
+    },
+    show: false
   });
 
   let loadUrl = {};

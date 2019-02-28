@@ -3,7 +3,7 @@ import { ApiService } from '../../services/api.service';
 import { SongResult } from '../../shared/interfaces/song-result.interface';
 import { SortType, sortTypeReadable } from '../../shared/sort-type';
 
-import $ from '../../shared/jQuery';
+import { $ } from '../../shared/globals';
 
 @Component({
   selector: 'app-browse',

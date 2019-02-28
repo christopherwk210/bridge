@@ -31,8 +31,11 @@
               "src/styles.scss"
             ],
             "scripts": [
+              "src/assets/scripts/preload.js",
               "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/semantic-ui/dist/semantic.min.js"
+              "node_modules/semantic-ui/dist/semantic.min.js",
+              "node_modules/vivus/dist/vivus.min.js",
+              "src/assets/scripts/postload.js"
             ],
             "es5BrowserSupport": true
           },
