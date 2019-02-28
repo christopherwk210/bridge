@@ -4,12 +4,6 @@
   overflow-y: scroll;
 }
 
-.image {
-  img {
-    border-radius: 4px !important;
-  }
-}
-
 .content {
   padding-top: 0.5em !important;
 }
@@ -24,25 +18,6 @@
 
 .ui.selection.dropdown {
   min-width: 230px;
-}
-
-.placeholder-image {
-  opacity: 0.5;
-}
-
-.album-img {
-  position: absolute;
-  z-index: 9;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-size: cover;
-  background-position: center;
-  border-radius: 4px;
-  background-repeat: no-repeat;
-
-  transition: opacity 0.4s;
 }
 
 .ui.dimmer {

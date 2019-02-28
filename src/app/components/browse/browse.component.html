@@ -19,16 +19,7 @@
     <i class="dropdown icon"></i>
     <div class="default text"></div>
     <div class="menu">
-      <div class="item" data-value="0">Newest First</div>
-      <div class="item" data-value="1">Oldest First</div>
-      <div class="item" data-value="2">By Song Name (Ascending)</div>
-      <div class="item" data-value="3">By Song Name (Descending)</div>
-      <div class="item" data-value="4">By Artist Name (Ascending)</div>
-      <div class="item" data-value="5">By Artist Name (Descending)</div>
-      <div class="item" data-value="6">By Album Name (Ascending)</div>
-      <div class="item" data-value="7">By Album Name (Descending)</div>
-      <div class="item" data-value="8">By Difficulty (Ascending)</div>
-      <div class="item" data-value="9">By Difficulty (Descending)</div>
+      <div class="item" [attr.data-value]="i" *ngFor="let sortType of sortTypeReadable; let i = index">{{sortType}}</div>
     </div>
   </div>
 
@@ -41,43 +32,4 @@
   <div class="ui medium text loader">Loading...</div>
 </div>
 
-<div class="ui items" *ngIf="viewMode === 'compact'">
-  <div class="item" *ngFor="let song of currentResults">
-    <div class="content">
-      <span class="header">{{song.name}}</span>
-      <div class="meta">
-        <span><strong>{{song.artist}}</strong> <span *ngIf="song.album">- {{song.album}}</span> <span *ngIf="song.year">({{song.year}})</span></span>
-      </div>
-      <div class="description">
-        <p></p>
-      </div>
-      <div class="extra">
-        <button class="ui teal button">Add to library</button>
-        <button class="ui teal button">Details</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="ui items" *ngIf="viewMode === 'details'">
-  <div class="item" *ngFor="let song of currentResults">
-    <div class="image">
-      <div class="album-img" *ngIf="song.directLinks['album.png']" [style.opacity]="song.imageLoaded ? 1 : 0" [style.backgroundImage]="'url(' + song.directLinks['album.png'] + ')'"></div>
-      <img style="display: none" *ngIf="song.directLinks['album.png']" [src]="song.directLinks['album.png']" (load)="song.imageLoaded = true">
-      <img class="placeholder-image" src="/assets/images/placeholder.jpg">
-    </div>
-    <div class="content">
-      <span class="header">{{song.name}}</span>
-      <div class="meta">
-        <span><strong>{{song.artist}}</strong> <span *ngIf="song.album">- {{song.album}}</span> <span *ngIf="song.year">({{song.year}})</span></span>
-      </div>
-      <div class="description">
-        <p></p>
-      </div>
-      <div class="extra">
-        <button class="ui teal button">Add to library</button>
-        <button class="ui teal button">Details</button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-chart-item [data]="currentResults" [mode]="viewMode"></app-chart-item>

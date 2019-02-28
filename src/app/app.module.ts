@@ -8,12 +8,14 @@ import { ApiService } from './services/api.service';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { BrowseComponent } from './components/browse/browse.component';
+import { ChartItemComponent } from './components/chart-item/chart-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    BrowseComponent
+    BrowseComponent,
+    ChartItemComponent
   ],
   imports: [
     BrowserModule,

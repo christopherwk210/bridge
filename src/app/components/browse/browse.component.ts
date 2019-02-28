@@ -1,19 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { SongResult } from 'src/app/interfaces/song-result.interface';
+import { SongResult } from '../../shared/interfaces/song-result.interface';
+import { SortType, sortTypeReadable } from '../../shared/sort-type';
 
-import $ from '../../jQuery';
-
-enum SortType {
-  NEWEST,
-  OLDEST,
-  SONG_NAME,
-  SONG_NAME_REVERSE,
-  ARTIST_NAME,
-  ARTIST_NAME_REVERSE,
-  ALBUM_NAME,
-  ALBUM_NAME_REVERSE
-}
+import $ from '../../shared/jQuery';
 
 @Component({
   selector: 'app-browse',
@@ -27,10 +17,12 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   @ViewChild('uiRandomBtn') uiRandomBtn: ElementRef;
   @ViewChild('uiSortDropdown') uiSortDropdown: ElementRef;
 
-  currentResults: SongResult[];
   loading = true;
-  sortType: SortType = SortType.NEWEST;
+  currentResults: SongResult[];
   viewMode: 'details' | 'grid' | 'compact' = 'details';
+
+  sortType: SortType = SortType.NEWEST;
+  sortTypeReadable = sortTypeReadable;
 
   constructor(private api: ApiService) {
 

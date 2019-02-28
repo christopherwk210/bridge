@@ -1,0 +1,49 @@
+<div class="ui items">
+  <div class="item" [style.animationDelay]="(0.05 * i) + 's'" *ngFor="let item of data; let i = index">
+
+    <ng-container *ngIf="mode === 'compact'">
+      <div class="content">
+        <span class="header">{{item.name}}</span>
+        <div class="meta">
+          <span><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></span>
+        </div>
+        <div class="description">
+          <p></p>
+        </div>
+        <div class="extra">
+          <button class="ui teal button">Add to library</button>
+          <button class="ui teal button">Details</button>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="mode === 'details'">
+      <div class="image">
+        <div class="album-img" *ngIf="item.directLinks['album.png']" [style.opacity]="item.imageLoaded ? 1 : 0" [style.backgroundImage]="'url(' + item.directLinks['album.png'] + ')'"></div>
+        <img style="display: none" *ngIf="item.directLinks['album.png']" [src]="item.directLinks['album.png']" (load)="item.imageLoaded = true">
+        <img class="placeholder-image" src="/assets/images/placeholder.jpg">
+      </div>
+      <div class="content">
+        <span class="header">{{item.name}}</span>
+        <div class="meta">
+          <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
+          <p>{{item.genre}}</p>
+          <p>{{formatSeconds(item.length)}} ({{formatSeconds(item.effectiveLength)}})</p>
+        </div>
+        <div class="description">
+          <p>
+
+          </p>
+        </div>
+        <div class="extra">
+          
+        </div>
+        <div class="buttons">
+          <button class="ui teal button">Add to library</button>
+          <button class="ui teal button">Details</button>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
