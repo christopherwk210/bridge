@@ -2,9 +2,9 @@
   <div class="item">
     <strong>bridge</strong>
   </div>
-  <a class="item active">Browse</a>
-  <a class="item">Downloads</a>
-  <a class="item">Library</a>
-  <a class="item">Settings</a>
-  <a class="item">About</a>
+  <a class="item" [class.active]="currentRoute === ''" (click)="router.navigate(['/'])">Browse</a>
+  <a class="item" [class.active]="currentRoute === 'downloads'" (click)="router.navigate(['/downloads'])">Downloads</a>
+  <a class="item" [class.active]="currentRoute === 'library'" (click)="router.navigate(['/library'])">Library</a>
+  <a class="item" [class.active]="currentRoute === 'settings'" (click)="router.navigate(['/settings'])">Settings</a>
+  <a class="item" [class.active]="currentRoute === 'about'" (click)="router.navigate(['/about'])">About</a>
 </div>

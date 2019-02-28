@@ -7,12 +7,12 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./toolbar.component.scss']
 })
 export class ToolbarComponent implements OnInit {
-  currentRoute = 'browse';
+  currentRoute = '';
 
-  constructor(private router: Router) {
+  constructor(public router: Router) {
     router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
-        console.log(val);
+        this.currentRoute = val.url.replace('/', '');
       }
     });
   }

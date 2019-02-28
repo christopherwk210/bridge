@@ -11,6 +11,10 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { BrowseComponent } from './components/browse/browse.component';
 import { ChartItemComponent } from './components/chart-item/chart-item.component';
 import { AppLoadingComponent } from './components/app-loading/app-loading.component';
+import { DownloadsComponent } from './components/downloads/downloads.component';
+import { LibraryComponent } from './components/library/library.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +22,11 @@ import { AppLoadingComponent } from './components/app-loading/app-loading.compon
     ToolbarComponent,
     BrowseComponent,
     ChartItemComponent,
-    AppLoadingComponent
+    AppLoadingComponent,
+    DownloadsComponent,
+    LibraryComponent,
+    SettingsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
