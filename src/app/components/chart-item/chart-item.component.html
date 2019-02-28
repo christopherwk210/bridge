@@ -14,10 +14,11 @@
         <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
         <p *ngIf="mode === 'details'">{{item.genre}}</p>
         <p *ngIf="mode === 'details'">{{formatSeconds(item.length)}} ({{formatSeconds(item.effectiveLength)}})</p>
+        <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
       </div>
 
       <div class="description">
-        <p *ngIf="mode === 'details'">Charted by {{item.charter}}</p>
+        <p></p>
       </div>
 
       <div class="extra"></div>
@@ -53,7 +54,8 @@
     <div class="content">
       <span class="header">{{item.name}}</span>
       <div class="meta">
-        <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
+        <p style="margin-top: 0.5em;"><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
+        <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
       </div>
     </div>
   </div>

@@ -82,6 +82,18 @@
     .image {
       position: relative;
     }
+
+    & > .content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+    }
   }
 }
 
