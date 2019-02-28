@@ -26,7 +26,7 @@
   border-radius: 4px;
   background-repeat: no-repeat;
 
-  transition: opacity 0.4s;
+  opacity: 0;
 }
 
 .content {
@@ -39,6 +39,10 @@
   }
 }
 
+.ui.animated.button {
+  vertical-align: bottom !important;
+}
+
 .meta {
   p {
     margin-bottom: 0 !important;
@@ -46,11 +50,13 @@
 }
 
 .item {
-  animation: appear 0.4s forwards ease;
-  opacity: 0;
-
   border-bottom: 1px dashed rgba(0,0,0,0.1) !important;
   padding-bottom: 1em !important;
+}
+
+.appearanim {
+  opacity: 0;
+  animation: appear 0.4s forwards ease;
 }
 
 @keyframes appear {

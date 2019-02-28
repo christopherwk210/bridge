@@ -1,0 +1,7 @@
+Move browse current results and all browse settings into a service
+
+Change image browsing to manually download images into a "cache" folder, and keep them in there for later. This way when items are marked as "loaded" they are actually permanently loaded into the cache.
+
+Add a way to clear cache of temp data (images downloaded when browsing)
+
+Add "Load more latest songs" and "Load more random songs" to bottom of browse scroll

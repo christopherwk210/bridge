@@ -16,6 +16,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   @ViewChild('uiGridBtn') uiGridBtn: ElementRef;
   @ViewChild('uiRandomBtn') uiRandomBtn: ElementRef;
   @ViewChild('uiSortDropdown') uiSortDropdown: ElementRef;
+  @ViewChild('uiNewestBtn') uiNewestBtn: ElementRef;
 
   loading = true;
   currentResults: SongResult[];
@@ -37,7 +38,8 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       this.uiDetailBtn.nativeElement,
       this.uiGridBtn.nativeElement,
       this.uiCompactBtn.nativeElement,
-      this.uiRandomBtn.nativeElement
+      this.uiRandomBtn.nativeElement,
+      this.uiNewestBtn.nativeElement
     ].forEach(element => {
       $(element).popup();
     });

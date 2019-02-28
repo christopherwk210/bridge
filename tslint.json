@@ -19,6 +19,8 @@
       true,
       140
     ],
+    "curly": false,
+    "no-bitwise": false,
     "member-access": false,
     "member-ordering": [
       true,

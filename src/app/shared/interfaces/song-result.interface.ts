@@ -29,6 +29,15 @@ export interface SongResult {
     };
   };
 
+  diff_guitar: number;
+  diff_bass: number;
+  diff_rhythm: number;
+  diff_drums: number;
+  diff_vocals: number;
+  diff_keys: number;
+  diff_guitarghl: number;
+  diff_bassghl: number;
+
   lastModified: string;
   uploadedAt: string;
   year: string;
