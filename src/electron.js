@@ -19,6 +19,8 @@ function createWindow () {
     dev: args['dev'] // Load from Angular CLI IP
   }
 
+
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1024,

@@ -11,3 +11,5 @@ Add progress bar to bottom of "downloads" toolbar button to show overall progres
 Themes folder?
 
 Fix sort by difficulty
+
+make electron singleton instance
