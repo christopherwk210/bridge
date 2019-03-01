@@ -1,6 +1,6 @@
 <div class="flex-row">
   <div class="ui icon input mr">
-    <input type="text" placeholder="Search...">
+    <input type="text" placeholder="Search..." [value]="settingsService.browseCurrentSearchQuery" (keydown)="handleBasicSearchKeydown($event)">
     <i class="search icon"></i>
   </div>
 
@@ -26,7 +26,7 @@
   <div #uiSortDropdown class="ui selection dropdown mr">
     <input type="hidden" name="sort" [value]="settingsService.browseSortType">
     <i class="dropdown icon"></i>
-    <div class="default text"></div>
+    <div class="default text">Relevance</div>
     <div class="menu">
       <div class="item" [attr.data-value]="i" *ngFor="let sortTypeReadable of sortTypeReadables; let i = index">{{sortTypeReadable}}</div>
     </div>

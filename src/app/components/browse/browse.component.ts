@@ -49,7 +49,16 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.setSort(this.settingsService.browseSortType);
+    if (this.settingsService.browseSortType !== - 1) {
+      this.setSort(this.settingsService.browseSortType);
+    }
+  }
+
+  handleBasicSearchKeydown(e: KeyboardEvent) {
+    if (e.key === 'Enter') {
+      this.settingsService.browseCurrentSearchQuery = e.target['value'];
+      this.loadBasicSearch(this.settingsService.browseCurrentSearchQuery);
+    }
   }
 
   sortResults(sortType: SortType) {
@@ -69,6 +78,10 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     }
   }
 
+  setSort(value: SortType) {
+    $(this.uiSortDropdown.nativeElement).dropdown('set selected', value);
+  }
+
   async randomize() {
     this.loading = true;
     this.settingsService.browseCurrentSongResults = [];
@@ -78,16 +91,23 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.loading = false;
   }
 
-  setSort(value: SortType) {
-    $(this.uiSortDropdown.nativeElement).dropdown('set selected', value);
-  }
-
   async loadLatestData() {
     this.loading = true;
     this.settingsService.browseCurrentSongResults = [];
     const result = await this.api.getLatest();
     this.settingsService.browseCurrentSongResults = result.songs;
     this.sortResults(this.settingsService.browseSortType);
+    this.loading = false;
+  }
+
+  async loadBasicSearch(query: string) {
+    this.loading = true;
+    this.settingsService.browseCurrentSongResults = [];
+    const result = await this.api.getBasicSearch(query);
+    this.settingsService.browseCurrentSongResults = result.songs;
+    $(this.uiSortDropdown.nativeElement).dropdown('clear');
+    $(this.uiSortDropdown.nativeElement).dropdown('set text', 'Relevance');
+    this.settingsService.browseSortType = -1;
     this.loading = false;
   }
 

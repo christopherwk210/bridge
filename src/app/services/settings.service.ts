@@ -9,6 +9,7 @@ export class SettingsService {
   browseCurrentSongResults: SongResult[];
   browseSortType: SortType;
   browseViewMode: 'details' | 'grid' | 'compact';
+  browseCurrentSearchQuery: string;
 
   constructor() { }
 
@@ -16,6 +17,7 @@ export class SettingsService {
     this.browseCurrentSongResults = [];
     this.browseSortType = SortType.NEWEST;
     this.browseViewMode = 'details';
+    this.browseCurrentSearchQuery = '';
     return true;
   }
 }
