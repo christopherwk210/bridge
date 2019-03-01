@@ -1,8 +1,18 @@
 // Imports
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 
+const fs = require('fs');
 const url = require('url');
 const path = require('path');
+
+const dataPath = app.getPath('userData');
+const settingsPath = path.join(dataPath, 'settings.json');
+const cachePath = path.join(dataPath, 'cache');
+
+const initialSettings = {
+  browseSortType: 0,
+  browseViewMode: 'details'
+};
 
 // Define a main window
 let mainWindow;
@@ -18,8 +28,6 @@ function createWindow () {
   let commands = {
     dev: args['dev'] // Load from Angular CLI IP
   }
-
-
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -99,4 +107,38 @@ app.on('ready', createWindow);
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   app.quit();
+});
+
+// Load settings on launch
+ipcMain.on('request-initial-load', e => {
+  const responseChannel = 'request-initial-load-response';
+
+  try {
+    const dataPathExists = fs.existsSync(dataPath);
+    if (!dataPathExists) fs.mkdirSync(dataPath);
+  
+    const settingsExists = fs.existsSync(settingsPath);
+    if (!settingsExists) {
+      const contents = JSON.stringify(initialSettings, null, 2);
+      fs.writeFileSync(settingsPath, contents, 'utf8');
+      e.sender.send(responseChannel, contents);
+    } else {
+      const contents = fs.readFileSync(settingsPath, 'utf8');
+      e.sender.send(responseChannel, contents);
+    }
+  } catch (e) {
+    console.log(e);
+    e.sender.send(responseChannel, '{ error: true }');
+  }
+});
+
+ipcMain.on('save-settings', (e, settings) => {
+  try {
+    const contents = JSON.stringify(settings, null, 2);
+    fs.writeFileSync(settingsPath, contents, 'utf8');
+  } catch (e) {
+    console.log(e);
+  }
+
+  e.returnValue = true;
 });

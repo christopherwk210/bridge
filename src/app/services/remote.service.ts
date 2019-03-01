@@ -1,14 +1,22 @@
 import { Injectable } from '@angular/core';
-import { remote } from 'electron';
+import * as electron from 'electron';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RemoteService {
-  remote: typeof remote;
+  electron: typeof electron;
+  remote: typeof electron.remote;
+  ipcRenderer: typeof electron.ipcRenderer;
 
   constructor() {
-    this.remote = this.require('electron').remote;
+    this.electron = this.require('electron');
+    this.remote = this.electron.remote;
+    this.ipcRenderer = this.electron.ipcRenderer;
+  }
+
+  get currentWindow() {
+    return this.remote.getCurrentWindow();
   }
 
   require(content: string) {
@@ -16,7 +24,24 @@ export class RemoteService {
     return eval(`nodeRequire('${content}')`);
   }
 
-  get currentWindow() {
-    return this.remote.getCurrentWindow();
+  sendIPC(channel: string, ...args: any[]) {
+    this.ipcRenderer.send(channel, ...args);
+  }
+
+  sendIPCSync(channel: string, ...args: any[]) {
+    this.ipcRenderer.sendSync(channel, ...args);
+  }
+
+  talkIPC(responseChannel: string, sendChannel: string, ...args: any[]): Promise<{ event: electron.IpcMessageEvent, args: any[] }> {
+    return new Promise(resolve => {
+      this.ipcRenderer.once(responseChannel, (e: electron.IpcMessageEvent, ...responseArgs: any[]) => {
+        resolve({
+          event: e,
+          args: responseArgs
+        });
+      });
+
+      this.sendIPC(sendChannel, args);
+    });
   }
 }
