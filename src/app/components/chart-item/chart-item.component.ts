@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SongResult } from '../../shared/interfaces/song-result.interface';
 
 @Component({
@@ -9,6 +9,9 @@ import { SongResult } from '../../shared/interfaces/song-result.interface';
 export class ChartItemComponent implements OnInit {
   @Input() mode: 'compact' | 'details' | 'grid';
   @Input() data: SongResult[];
+
+  @Output() detailsClicked: EventEmitter<SongResult> = new EventEmitter();
+  @Output() downloadClicked: EventEmitter<SongResult> = new EventEmitter();
 
   constructor() { }
 

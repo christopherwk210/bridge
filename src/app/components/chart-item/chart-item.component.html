@@ -1,19 +1,10 @@
-<div class="ui items" *ngIf="mode !== 'grid'">
+<div class="ui items" *ngIf="mode === 'compact'">
   <div class="item appearanim" [style.animationDelay]="(0.05 * i) + 's'" *ngFor="let item of data; let i = index">
-
-    <div class="image" *ngIf="mode === 'details'">
-      <div class="album-img appearanim" *ngIf="item.directLinks['album.png'] && item.imageLoaded" [style.backgroundImage]="'url(' + item.directLinks['album.png'] + ')'"></div>
-      <img style="display: none" *ngIf="item.directLinks['album.png']" [src]="item.directLinks['album.png']" (load)="item.imageLoaded = true">
-      <img class="placeholder-image" src="/assets/images/placeholder.jpg">
-    </div>
-
     <div class="content">
       <span class="header">{{item.name}}</span>
 
       <div class="meta">
         <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
-        <p *ngIf="mode === 'details'">{{item.genre}}</p>
-        <p *ngIf="mode === 'details'">{{formatSeconds(item.length)}} ({{formatSeconds(item.effectiveLength)}})</p>
         <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
       </div>
 
@@ -24,8 +15,45 @@
       <div class="extra"></div>
 
       <div class="buttons">
-        <button class="ui button">Details</button>
-        <div class="ui vertical teal animated button">
+        <button class="ui button" (click)="detailsClicked.emit(item)">Details</button>
+        <div class="ui vertical teal animated button" (click)="downloadClicked.emit(item)">
+          <div class="hidden content"><i class="down arrow icon"></i></div>
+          <div class="visible content">Add to library</div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="ui items" *ngIf="mode === 'details'">
+  <div class="item appearanim" [style.animationDelay]="(0.05 * i) + 's'" *ngFor="let item of data; let i = index">
+
+    <div class="image">
+      <div class="album-img appearanim" *ngIf="item.directLinks['album.png'] && item.imageLoaded" [style.backgroundImage]="'url(' + item.directLinks['album.png'] + ')'"></div>
+      <img style="display: none" *ngIf="item.directLinks['album.png']" [src]="item.directLinks['album.png']" (load)="item.imageLoaded = true">
+      <img class="placeholder-image" src="/assets/images/placeholder.jpg">
+    </div>
+
+    <div class="content">
+      <span class="header">{{item.name}}</span>
+
+      <div class="meta">
+        <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
+        <p>{{item.genre}}</p>
+        <p>{{formatSeconds(item.length)}} ({{formatSeconds(item.effectiveLength)}})</p>
+        <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
+      </div>
+
+      <div class="description">
+        <p></p>
+      </div>
+
+      <div class="extra"></div>
+
+      <div class="buttons">
+        <button class="ui button" (click)="detailsClicked.emit(item)">Details</button>
+        <div class="ui vertical teal animated button" (click)="downloadClicked.emit(item)">
           <div class="hidden content"><i class="down arrow icon"></i></div>
           <div class="visible content">Add to library</div>
         </div>
@@ -39,8 +67,8 @@
   <div class="ui card appearanim" [style.animationDelay]="(0.05 * i) + 's'" *ngFor="let item of data; let i = index">
     <div class="image">
       <div class="overlay">
-        <button class="ui button">Details</button>
-        <div class="ui vertical teal animated button">
+        <button class="ui button" (click)="detailsClicked.emit(item)">Details</button>
+        <div class="ui vertical teal animated button" (click)="downloadClicked.emit(item)">
           <div class="hidden content"><i class="down arrow icon"></i></div>
           <div class="visible content">Add to library</div>
         </div>

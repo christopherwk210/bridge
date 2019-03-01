@@ -9,17 +9,26 @@
   </button>
 
   <div class="ui icon buttons mr">
-    <button #uiCompactBtn data-content="View compact results" data-position="bottom center" class="ui button" (click)="viewMode = 'compact'" [class.active]="viewMode === 'compact'"><i class="list icon"></i></button>
-    <button #uiDetailBtn data-content="View results in detail" data-position="bottom center" class="ui button" (click)="viewMode = 'details'" [class.active]="viewMode === 'details'"><i class="th list icon"></i></button>
-    <button #uiGridBtn data-content="View results in a grid" data-position="bottom center" class="ui button" (click)="viewMode = 'grid'" [class.active]="viewMode === 'grid'"><i class="th icon"></i></button>
+    <button #uiCompactBtn data-content="View compact results" data-position="bottom center"
+      class="ui button" (click)="settingsService.browseViewMode = 'compact'" [class.active]="settingsService.browseViewMode === 'compact'">
+      <i class="list icon"></i>
+    </button>
+    <button #uiDetailBtn data-content="View results in detail" data-position="bottom center"
+      class="ui button" (click)="settingsService.browseViewMode = 'details'" [class.active]="settingsService.browseViewMode === 'details'">
+      <i class="th list icon"></i>
+    </button>
+    <button #uiGridBtn data-content="View results in a grid" data-position="bottom center"
+      class="ui button" (click)="settingsService.browseViewMode = 'grid'" [class.active]="settingsService.browseViewMode === 'grid'">
+      <i class="th icon"></i>
+    </button>
   </div>
 
   <div #uiSortDropdown class="ui selection dropdown mr">
-    <input type="hidden" name="sort" value="0">
+    <input type="hidden" name="sort" [value]="settingsService.browseSortType">
     <i class="dropdown icon"></i>
     <div class="default text"></div>
     <div class="menu">
-      <div class="item" [attr.data-value]="i" *ngFor="let sortType of sortTypeReadable; let i = index">{{sortType}}</div>
+      <div class="item" [attr.data-value]="i" *ngFor="let sortTypeReadable of sortTypeReadables; let i = index">{{sortTypeReadable}}</div>
     </div>
   </div>
 
@@ -33,4 +42,4 @@
   <div class="ui medium text loader">Loading...</div>
 </div>
 
-<app-chart-item [data]="currentResults" [mode]="viewMode"></app-chart-item>
+<app-chart-item [data]="settingsService.browseCurrentSongResults" [mode]="settingsService.browseViewMode" (detailsClicked)="handleDetailClicked($event)" (downloadClicked)="handleDownloadClicked($event)"></app-chart-item>

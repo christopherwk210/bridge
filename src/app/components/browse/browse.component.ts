@@ -4,6 +4,7 @@ import { SongResult } from '../../shared/interfaces/song-result.interface';
 import { SortType, sortTypeReadable } from '../../shared/sort-type';
 
 import { $ } from '../../shared/globals';
+import { SettingsService } from 'src/app/services/settings.service';
 
 @Component({
   selector: 'app-browse',
@@ -18,19 +19,14 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   @ViewChild('uiSortDropdown') uiSortDropdown: ElementRef;
   @ViewChild('uiNewestBtn') uiNewestBtn: ElementRef;
 
-  loading = true;
-  currentResults: SongResult[];
-  viewMode: 'details' | 'grid' | 'compact' = 'details';
+  loading: boolean;
+  sortTypeReadables = sortTypeReadable;
 
-  sortType: SortType = SortType.NEWEST;
-  sortTypeReadable = sortTypeReadable;
-
-  constructor(private api: ApiService) {
-
+  constructor(private api: ApiService, public settingsService: SettingsService) {
   }
 
   ngOnInit() {
-    this.loadLatestData();
+    if (!this.settingsService.browseCurrentSongResults || !this.settingsService.browseCurrentSongResults.length) this.loadLatestData();
   }
 
   ngAfterViewInit() {
@@ -45,17 +41,17 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     });
 
     $(this.uiSortDropdown.nativeElement).dropdown({
-      onChange: (value: number, text: string) => this.sortType = value
+      onChange: (value: number, text: string) => this.settingsService.browseSortType = value
     });
 
-    this.setSort(this.sortType);
+    this.setSort(this.settingsService.browseSortType);
   }
 
   async randomize() {
-    this.currentResults = [];
     this.loading = true;
+    this.settingsService.browseCurrentSongResults = [];
     const result = await this.api.getRandom();
-    this.currentResults = result.songs;
+    this.settingsService.browseCurrentSongResults = result.songs;
     this.loading = false;
   }
 
@@ -64,10 +60,14 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   async loadLatestData() {
-    this.currentResults = [];
+    this.loading = true;
+    this.settingsService.browseCurrentSongResults = [];
     const result = await this.api.getLatest();
-    this.currentResults = result.songs;
+    this.settingsService.browseCurrentSongResults = result.songs;
     this.loading = false;
   }
+
+  handleDownloadClicked(song: SongResult) { console.log(song); }
+  handleDetailClicked(song: SongResult) { console.log(song); }
 
 }

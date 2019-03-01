@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { ApiService } from './services/api.service';
 import { RemoteService } from './services/remote.service';
+import { SettingsService } from './services/settings.service';
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
@@ -35,7 +36,8 @@ import { AboutComponent } from './components/about/about.component';
   ],
   providers: [
     ApiService,
-    RemoteService
+    RemoteService,
+    SettingsService
   ],
   bootstrap: [AppComponent]
 })
