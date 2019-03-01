@@ -9,3 +9,5 @@ Add handling of failed to reach api
 Add progress bar to bottom of "downloads" toolbar button to show overall progress of all downloads
 
 Themes folder?
+
+Fix sort by difficulty

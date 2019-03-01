@@ -43,6 +43,7 @@
       "trace"
     ],
     "no-empty": false,
+    "radix": false,
     "no-inferrable-types": [
       true,
       "ignore-params"

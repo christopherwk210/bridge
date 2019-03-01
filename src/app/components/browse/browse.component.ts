@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { ApiService } from '../../services/api.service';
 import { SongResult } from '../../shared/interfaces/song-result.interface';
 import { SortType, sortTypeReadable } from '../../shared/sort-type';
+import * as sortFunctions from '../../shared/song-result-sorts';
 
 import { $ } from '../../shared/globals';
 import { SettingsService } from 'src/app/services/settings.service';
@@ -41,10 +42,31 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     });
 
     $(this.uiSortDropdown.nativeElement).dropdown({
-      onChange: (value: number, text: string) => this.settingsService.browseSortType = value
+      onChange: (value: string, text: string) => {
+        const actualValue = parseInt(value);
+        this.settingsService.browseSortType = actualValue;
+        this.sortResults(actualValue);
+      }
     });
 
     this.setSort(this.settingsService.browseSortType);
+  }
+
+  sortResults(sortType: SortType) {
+    switch (sortType) {
+      case SortType.NEWEST: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByNewest); break;
+      case SortType.OLDEST: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByOldest); break;
+      case SortType.SONG_NAME_ASC: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByNameAscending); break;
+      case SortType.SONG_NAME_DES: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByNameDescending); break;
+      case SortType.ARTIST_NAME_ASC: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByArtistNameAscending); break;
+      case SortType.ARTIST_NAME_DES: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByArtistNameDescending); break;
+      case SortType.ALBUM_NAME_ASC: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByAlbumNameAscending); break;
+      case SortType.ALBUM_NAME_DES: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByAlbumNameDescending); break;
+      case SortType.DIFFUCULTY_ASC:
+        this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByGuitarDifficultyAscending); break;
+      case SortType.DIFFUCULTY_DES:
+        this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByGuitarDifficultyDescending); break;
+    }
   }
 
   async randomize() {
@@ -52,6 +74,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.settingsService.browseCurrentSongResults = [];
     const result = await this.api.getRandom();
     this.settingsService.browseCurrentSongResults = result.songs;
+    this.sortResults(this.settingsService.browseSortType);
     this.loading = false;
   }
 
@@ -64,6 +87,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.settingsService.browseCurrentSongResults = [];
     const result = await this.api.getLatest();
     this.settingsService.browseCurrentSongResults = result.songs;
+    this.sortResults(this.settingsService.browseSortType);
     this.loading = false;
   }
 
