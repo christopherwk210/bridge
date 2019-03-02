@@ -1,3 +1,19 @@
-<p>
-  about works!
-</p>
+<img class="logo" src="/assets/images/logo-sm.png">
+<h4 class="ui header">Created by Topher</h4>
+
+<div class="text-center">
+  <button class="ui button" (click)="openURL(githubLink)">View on GitHub</button>
+  <button class="ui button" (click)="openURL(itchLink)">View on itch.io</button>
+</div>
+
+<div class="bottom">
+  <div class="ui left labeled button">
+    <span class="ui basic label">v1.0.0</span>
+    <div class="ui button">
+      Check for updates
+    </div>
+  </div>
+  <button class="ui basic icon button" (click)="toggleDevTools()">
+    <i class="cog icon"></i>
+  </button>
+</div>

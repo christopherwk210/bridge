@@ -32,7 +32,7 @@ export class AppLoadingComponent implements AfterViewInit, OnInit {
         duration: 120,
         animTimingFunction: Vivus.EASE
       },
-      () => this.loadedAsset()
+      () => setTimeout(() => this.loadedAsset(), 400)
     );
   }
 

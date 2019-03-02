@@ -1,5 +1,65 @@
 :host {
   flex: 1;
   padding: 2em;
-  overflow-y: scroll;
+}
+
+$width: 300px;
+$svgWidth: 835;
+$svgHeight: 445;
+
+.logo {
+  display: block;
+  margin: 1em auto;
+}
+
+.header {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 100;
+  letter-spacing: 5px;
+  word-spacing: 20px;
+}
+
+.bottom {
+  position: absolute;
+  bottom: 2em;
+  left: 2em;
+  right: 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left.labeled.button {
+  .ui.basic.label {
+    transition: opacity 0.3s;
+    opacity: 0.6;
+  }
+
+  &:hover {
+    .ui.basic.label {
+      opacity: 1;
+    }
+
+    .ui.button {
+      background-color: #cacbcd;
+      background-image: none;
+      box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34,36,38,.15) inset;
+      color: rgba(0,0,0,.8);
+    }
+  }
+
+  &:active {
+    .ui.button {
+      background-color: #babbbc;
+      background-image: '';
+      color: rgba(0,0,0,.9);
+      box-shadow: 0 0 0 1px transparent inset,none;
+    }
+  }
+}
+
+.text-center {
+  text-align: center;
+  margin-top: 2em;
 }
