@@ -3,3 +3,8 @@
   padding: 2em;
   overflow-y: scroll;
 }
+
+.default-cursor {
+  cursor: default;
+  pointer-events: none;
+}

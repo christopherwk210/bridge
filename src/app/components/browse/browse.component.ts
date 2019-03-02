@@ -45,7 +45,14 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       onChange: (value: string, text: string) => {
         const actualValue = parseInt(value);
         this.settingsService.browseSortType = actualValue;
-        this.sortResults(actualValue);
+
+        const tempResults = this.settingsService.browseCurrentSongResults.slice();
+        this.settingsService.browseCurrentSongResults = [];
+
+        setTimeout(() => {
+          this.settingsService.browseCurrentSongResults = tempResults;
+          this.sortResults(actualValue);
+        });
       }
     });
 
@@ -79,10 +86,15 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   setSort(value: SortType) {
-    $(this.uiSortDropdown.nativeElement).dropdown('set selected', value);
+    $(this.uiSortDropdown.nativeElement).dropdown('set selected', `${value}`);
   }
 
   async randomize() {
+    if (this.settingsService.browseSortType === -1) {
+      this.settingsService.browseSortType = SortType.NEWEST;
+      this.setSort(SortType.NEWEST);
+    }
+    this.settingsService.browseCurrentSearchQuery = '';
     this.loading = true;
     this.settingsService.browseCurrentSongResults = [];
     const result = await this.api.getRandom();
@@ -92,6 +104,11 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   async loadLatestData() {
+    if (this.settingsService.browseSortType === -1) {
+      this.settingsService.browseSortType = SortType.NEWEST;
+      this.setSort(SortType.NEWEST);
+    }
+    this.settingsService.browseCurrentSearchQuery = '';
     this.loading = true;
     this.settingsService.browseCurrentSongResults = [];
     const result = await this.api.getLatest();
@@ -113,5 +130,4 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
   handleDownloadClicked(song: SongResult) { console.log(song); }
   handleDetailClicked(song: SongResult) { console.log(song); }
-
 }
