@@ -12,6 +12,4 @@ Themes folder?
 
 Fix sort by difficulty
 
-make electron singleton instance
-
 handle error when parsing loaded settings json

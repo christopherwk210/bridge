@@ -17,6 +17,18 @@ const initialSettings = {
 // Define a main window
 let mainWindow;
 
+let shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.focus();
+  }
+});
+
+if (shouldQuit) {
+  app.quit();
+  return;
+}
+
 /**
  * Create the main application window
  */
