@@ -1,6 +1,7 @@
 {
   "name": "bridge",
   "version": "0.0.0",
+  "description": "A handy CloneHero library management tool with a built in Chorus client.",
   "scripts": {
     "ng": "ng",
     "start": "node tools/process-manager.js",
@@ -48,5 +49,14 @@
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "~3.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christopherwk210/bridge"
+  },
+  "license": "GPL-3.0",
+  "author": {
+    "email": "christopherwk210@gmail.com",
+    "name": "Chris Anselmo"
   }
 }

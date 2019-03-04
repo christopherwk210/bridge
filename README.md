@@ -6,7 +6,7 @@
 
 ## ⚠️ CURRENTLY IN ACTIVE DEVELOPMENT ⚠️
 
-## Setting up locally
+### Setting up locally
 Clone the repo and install dependencies:
 ```
 $ git clone https://github.com/christopherwk210/bridge.git
@@ -14,7 +14,7 @@ $ cd bridge
 $ npm i
 ```
 
-## Development
+### Development
 Run the application in development mode:
 ```
 $ npm start
