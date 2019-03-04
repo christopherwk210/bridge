@@ -1,0 +1,20 @@
+<div
+  #modal
+  class="ui modal"
+  [class.basic]="basic"
+  [class.mini]="size === 'mini'"
+  [class.tiny]="size === 'tiny'"
+  [class.small]="size === 'small'"
+  [class.large]="size === 'large'"
+>
+  <div class="ui header" *ngIf="title" [class.icon]="icon">
+    <i *ngIf="icon" [class]="icon + ' icon'"></i>
+    {{title}}
+  </div>
+  <div class="content">
+    <ng-content></ng-content>
+  </div>
+  <div class="actions">
+    <div [class]="button.class" *ngFor="let button of actionList; let i = index" (click)="selectResponse(i)">{{button.text}}</div>
+  </div>
+</div>

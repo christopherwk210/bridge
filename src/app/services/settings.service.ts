@@ -19,6 +19,8 @@ export class SettingsService {
   browseCurrentSongResults: SongResult[];
   browseCurrentSearchQuery: string;
 
+  chartLibraryDirectory: string;
+
   constructor(private remoteService: RemoteService) { }
 
   async loadSettings() {

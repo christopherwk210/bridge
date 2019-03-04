@@ -1,11 +1,15 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { ApiService } from '../../services/api.service';
+import { SettingsService } from 'src/app/services/settings.service';
+
 import { SongResult } from '../../shared/interfaces/song-result.interface';
+import { $ } from '../../shared/globals';
 import { SortType, sortTypeReadable } from '../../shared/sort-type';
 import * as sortFunctions from '../../shared/song-result-sorts';
 
-import { $ } from '../../shared/globals';
-import { SettingsService } from 'src/app/services/settings.service';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-browse',
@@ -19,11 +23,12 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   @ViewChild('uiRandomBtn') uiRandomBtn: ElementRef;
   @ViewChild('uiSortDropdown') uiSortDropdown: ElementRef;
   @ViewChild('uiNewestBtn') uiNewestBtn: ElementRef;
+  @ViewChild('modal') modal: ModalComponent;
 
   loading: boolean;
   sortTypeReadables = sortTypeReadable;
 
-  constructor(private api: ApiService, public settingsService: SettingsService) {
+  constructor(private api: ApiService, public settingsService: SettingsService, private router: Router) {
   }
 
   ngOnInit() {
@@ -56,6 +61,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       }
     });
 
+    // If we aren't loading into unsorted data, force a sort on load
     if (this.settingsService.browseSortType !== - 1) {
       this.setSort(this.settingsService.browseSortType);
     }
@@ -69,20 +75,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   sortResults(sortType: SortType) {
-    switch (sortType) {
-      case SortType.NEWEST: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByNewest); break;
-      case SortType.OLDEST: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByOldest); break;
-      case SortType.SONG_NAME_ASC: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByNameAscending); break;
-      case SortType.SONG_NAME_DES: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByNameDescending); break;
-      case SortType.ARTIST_NAME_ASC: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByArtistNameAscending); break;
-      case SortType.ARTIST_NAME_DES: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByArtistNameDescending); break;
-      case SortType.ALBUM_NAME_ASC: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByAlbumNameAscending); break;
-      case SortType.ALBUM_NAME_DES: this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByAlbumNameDescending); break;
-      case SortType.DIFFUCULTY_ASC:
-        this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByGuitarDifficultyAscending); break;
-      case SortType.DIFFUCULTY_DES:
-        this.settingsService.browseCurrentSongResults.sort(sortFunctions.sortByGuitarDifficultyDescending); break;
-    }
+    this.settingsService.browseCurrentSongResults.sort( sortFunctions.getSortTypeFunction(sortType) );
   }
 
   setSort(value: SortType) {
@@ -90,30 +83,39 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   async randomize() {
-    if (this.settingsService.browseSortType === -1) {
-      this.settingsService.browseSortType = SortType.NEWEST;
-      this.setSort(SortType.NEWEST);
-    }
-    this.settingsService.browseCurrentSearchQuery = '';
-    this.loading = true;
-    this.settingsService.browseCurrentSongResults = [];
-    const result = await this.api.getRandom();
-    this.settingsService.browseCurrentSongResults = result.songs;
-    this.sortResults(this.settingsService.browseSortType);
-    this.loading = false;
+    await this.loadNewData('random');
   }
 
   async loadLatestData() {
+    await this.loadNewData('latest');
+  }
+
+  async loadNewData(dataset: 'random' | 'latest') {
+
+    // Reset to newest sorting if currently unsorted
     if (this.settingsService.browseSortType === -1) {
       this.settingsService.browseSortType = SortType.NEWEST;
       this.setSort(SortType.NEWEST);
     }
+
+    // Reset our search query, loading state, and current list of songs
     this.settingsService.browseCurrentSearchQuery = '';
     this.loading = true;
     this.settingsService.browseCurrentSongResults = [];
-    const result = await this.api.getLatest();
+
+    // Determine our dataset and request it
+    let method;
+    switch (dataset) {
+      case 'random': method = 'getRandom'; break;
+      case 'latest': method = 'getLatest'; break;
+    }
+
+    const result = await this.api[method]();
+
+    // Save and sort the results
     this.settingsService.browseCurrentSongResults = result.songs;
     this.sortResults(this.settingsService.browseSortType);
+
     this.loading = false;
   }
 
@@ -128,6 +130,26 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.loading = false;
   }
 
-  handleDownloadClicked(song: SongResult) { console.log(song); }
+  async handleDownloadClicked(song: SongResult) {
+    console.log(song);
+
+    if (!this.settingsService.chartLibraryDirectory) {
+      const response = await this.modal.showModal([
+        {
+          class: 'ui cancel inverted button',
+          text: 'Keep browsing'
+        },
+        {
+          class: 'ui teal ok inverted button',
+          text: 'Go to settings'
+        }
+      ]);
+
+      if (response === 1) this.router.navigate(['/settings']);
+    } else {
+
+    }
+  }
+
   handleDetailClicked(song: SongResult) { console.log(song); }
 }

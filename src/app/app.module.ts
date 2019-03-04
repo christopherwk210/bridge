@@ -16,6 +16,7 @@ import { DownloadsComponent } from './components/downloads/downloads.component';
 import { LibraryComponent } from './components/library/library.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { AboutComponent } from './components/about/about.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { AboutComponent } from './components/about/about.component';
     DownloadsComponent,
     LibraryComponent,
     SettingsComponent,
-    AboutComponent
+    AboutComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,

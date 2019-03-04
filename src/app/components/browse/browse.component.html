@@ -43,3 +43,7 @@
 </div>
 
 <app-chart-item [data]="settingsService.browseCurrentSongResults" [mode]="settingsService.browseViewMode" (detailsClicked)="handleDetailClicked($event)" (downloadClicked)="handleDownloadClicked($event)"></app-chart-item>
+
+<app-modal #modal title="Hold up" [basic]="true" icon="exclamation" size="tiny" [closable]="false">
+  <p>You can't add any charts to your library until you choose a library directory!</p>
+</app-modal>

@@ -1,4 +1,22 @@
 import { SongResult } from './interfaces/song-result.interface';
+import { SortType } from './sort-type';
+
+export function getSortTypeFunction(sortType: SortType) {
+  const orderedSortFunctions = [
+    sortByNewest,
+    sortByOldest,
+    sortByNameAscending,
+    sortByNameDescending,
+    sortByArtistNameAscending,
+    sortByArtistNameDescending,
+    sortByAlbumNameAscending,
+    sortByAlbumNameDescending,
+    sortByGuitarDifficultyAscending,
+    sortByGuitarDifficultyDescending
+  ];
+
+  return orderedSortFunctions[sortType];
+}
 
 function sortByProperty(songResultA: SongResult, songResultB: SongResult, property: string, direction: 'ascending' | 'descending') {
   const propA = songResultA[property];

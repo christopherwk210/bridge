@@ -17,17 +17,18 @@ const initialSettings = {
 // Define a main window
 let mainWindow;
 
-let shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+  return;
+}
+
+app.on('second-instance', (event, commandLine, workingDirectory) => {
   if (mainWindow) {
     if (mainWindow.isMinimized()) mainWindow.restore();
     mainWindow.focus();
   }
 });
-
-if (shouldQuit) {
-  app.quit();
-  return;
-}
 
 /**
  * Create the main application window
@@ -50,7 +51,9 @@ function createWindow () {
     frame: false,
     webPreferences: {
       webSecurity: false,
-      allowRunningInsecureContent: false
+      allowRunningInsecureContent: false,
+      nodeIntegration: true,
+      textAreasAreResizable: false,
     },
     show: false,
     title: 'bridge',

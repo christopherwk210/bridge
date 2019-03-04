@@ -13,7 +13,7 @@ export class AppLoadingComponent implements AfterViewInit, OnInit {
   logoVivus: any;
 
   loadedAssetCount = 0;
-  totalAssets = 2;
+  totalAssets = 1;
 
   constructor(private settingService: SettingsService) { }
 
