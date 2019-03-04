@@ -16,10 +16,10 @@ interface LocalSettings {
 export class SettingsService {
   localSettings: LocalSettings;
 
-  browseCurrentSongResults: SongResult[];
-  browseCurrentSearchQuery: string;
+  browseCurrentSongResults: SongResult[] = [];
+  browseCurrentSearchQuery = '';
 
-  chartLibraryDirectory: string;
+  chartLibraryDirectory = '';
 
   constructor(private remoteService: RemoteService) { }
 
@@ -32,9 +32,6 @@ export class SettingsService {
       //
     }
 
-    // Initialize browse defaults
-    this.browseCurrentSongResults = [];
-    this.browseCurrentSearchQuery = '';
     return true;
   }
 

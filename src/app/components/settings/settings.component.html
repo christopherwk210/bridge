@@ -3,7 +3,7 @@
   <div class="field">
     <label>Chart library directory</label>
     <div class="ui action input">
-      <input class="default-cursor" readonly type="text" placeholder="No directory selected!">
+      <input [value]="settingService.chartLibraryDirectory" class="default-cursor" readonly type="text" placeholder="No directory selected!">
       <button class="ui button">Choose</button>
     </div>
   </div>
