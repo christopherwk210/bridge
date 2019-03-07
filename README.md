@@ -5,7 +5,8 @@
 <img align="center" src="https://img.itch.zone/aW1hZ2UvMzc4NTIxLzE5MTU4NTQucG5n/original/6MTZt0.png" />
 <p align="center">
   <a href="https://topherlicious.itch.io/bridge">itch.io</a> | 
-  <a href="https://trello.com/b/gC0cZDuX/bridge">Trello</a>
+  <a href="https://trello.com/b/gC0cZDuX/bridge">Trello</a> | 
+  <a href="https://discord.gg/UABebr">Discord</a>
 </p>
 <hr>
 <h3 align="center">⚠️ CURRENTLY IN ACTIVE DEVELOPMENT ⚠️</h3>

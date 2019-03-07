@@ -10,6 +10,7 @@ import { SettingsService } from '../../services/settings.service';
 export class AboutComponent implements OnInit {
   githubLink = 'https://github.com/christopherwk210/bridge';
   itchLink = 'https://topherlicious.itch.io/bridge';
+  trelloLink = 'https://trello.com/b/gC0cZDuX/bridge';
 
   constructor(private remoteService: RemoteService, public settingsService: SettingsService) { }
 
