@@ -5,10 +5,13 @@
   "scripts": {
     "ng": "ng",
     "start": "node tools/process-manager.js",
-    "build": "ng build",
+    "build": "ng build --prod --base-href=\"./\"",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "package.win": "electron-packager ./dist/bridge bridge --arch=ia32,x64 --asar --icon=./src/assets/images/system/icons/win/icon.ico --out=./bin/win --overwrite --platform=win32",
+    "package.mac": "electron-packager ./dist/bridge bridge --arch=x64 --asar --icon=./src/assets/images/system/icons/mac/icon.icns --out=./bin/mac --overwrite --platform=darwin",
+    "package.linux": "electron-packager ./dist/bridge bridge --arch=x64 --asar --out=./bin/linux --overwrite --platform=linux"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +41,7 @@
     "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "electron": "^4.0.5",
+    "electron-packager": "^13.1.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.0.0",
