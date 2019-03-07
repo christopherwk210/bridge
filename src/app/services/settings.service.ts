@@ -26,6 +26,10 @@ export class SettingsService {
 
   constructor(private remoteService: RemoteService) { }
 
+  /**
+   * Should be called once at start of application. Loads all local user settings
+   * into memory, including version
+   */
   async loadSettings() {
     const result = await this.remoteService.talkIPC('request-initial-load-response', 'request-initial-load');
 
@@ -42,6 +46,9 @@ export class SettingsService {
     return true;
   }
 
+  /**
+   * Sends current in-memory settings to be saved
+   */
   saveSettings() {
     this.remoteService.sendIPCSync('save-settings', this.localSettings);
   }

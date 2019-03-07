@@ -122,11 +122,14 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   async loadBasicSearch(query: string) {
     this.loading = true;
     this.settingsService.browseCurrentSongResults = [];
+
     const result = await this.api.getBasicSearch(query);
     this.settingsService.browseCurrentSongResults = result.songs;
+
     $(this.uiSortDropdown.nativeElement).dropdown('clear');
     $(this.uiSortDropdown.nativeElement).dropdown('set text', 'Relevance');
     this.settingsService.browseSortType = -1;
+
     this.loading = false;
   }
 
@@ -147,7 +150,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
       if (response === 1) this.router.navigate(['/settings']);
     } else {
-
+      // Download code goes here
     }
   }
 

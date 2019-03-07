@@ -1,3 +1,5 @@
+/* Implemented chart sorting methods */
+
 import { SongResult } from './interfaces/song-result.interface';
 import { SortType } from './sort-type';
 

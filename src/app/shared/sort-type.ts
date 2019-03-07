@@ -1,3 +1,5 @@
+/* Chart sorting types */
+
 export enum SortType {
   NEWEST,
   OLDEST,

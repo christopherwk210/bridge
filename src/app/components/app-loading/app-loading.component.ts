@@ -32,6 +32,11 @@ export class AppLoadingComponent implements AfterViewInit, OnInit {
         duration: 120,
         animTimingFunction: Vivus.EASE
       },
+
+      // Having the logo animation count as an item to load ensures
+      // that the animation will complete every time before entry
+      // is granted, in case the app loads before the animation is finished
+      // (which is not likely for users with large libraries)
       () => setTimeout(() => this.loadedAsset(), 400)
     );
   }
