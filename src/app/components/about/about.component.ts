@@ -11,6 +11,7 @@ export class AboutComponent implements OnInit {
   githubLink = 'https://github.com/christopherwk210/bridge';
   itchLink = 'https://topherlicious.itch.io/bridge';
   trelloLink = 'https://trello.com/b/gC0cZDuX/bridge';
+  patreonLink = 'https://www.patreon.com/cloneherobridge';
 
   constructor(private remoteService: RemoteService, public settingsService: SettingsService) { }
 
