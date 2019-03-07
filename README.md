@@ -21,8 +21,8 @@ Features:
 - ❌ Preview charts
 - ❌ Theme support
 
-```
-✅ Complete
-⚠️ In progress
-❌ Not yet started
-```
+Key:
+
+- ✅ Complete
+- ⚠️ In progress
+- ❌ Not yet started
