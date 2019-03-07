@@ -64,4 +64,10 @@ export class SettingsService {
     this.localSettings.browseViewMode = newValue;
     this.saveSettings();
   }
+
+  get chartLibraryDirectory() { return this.localSettings.chartLibraryDirectory; }
+  set chartLibraryDirectory(newValue: string) {
+    this.localSettings.chartLibraryDirectory = newValue;
+    this.saveSettings();
+  }
 }

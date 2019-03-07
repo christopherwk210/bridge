@@ -44,4 +44,15 @@ export class RemoteService {
       this.sendIPC(sendChannel, args);
     });
   }
+
+  /**
+   * Async wrapper for showOpenDialog
+   */
+  showOpenDialog(options: electron.OpenDialogOptions): Promise<string[]> {
+    return new Promise(resolve => {
+      this.remote.dialog.showOpenDialog(this.currentWindow, options, (paths) => {
+        resolve( paths );
+      });
+    });
+  }
 }

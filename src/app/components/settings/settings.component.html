@@ -3,8 +3,8 @@
   <div class="field">
     <label>Chart library directory</label>
     <div class="ui action input">
-      <input [value]="settingService.localSettings.chartLibraryDirectory" class="default-cursor" readonly type="text" placeholder="No directory selected!">
-      <button class="ui button">Choose</button>
+      <input [value]="settingService.chartLibraryDirectory" class="default-cursor" readonly type="text" placeholder="No directory selected!">
+      <button (click)="getLibraryDirectory()" class="ui button">Choose</button>
     </div>
   </div>
 </div>
