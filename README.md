@@ -2,6 +2,7 @@
   <img src="./src/assets/images/bridge-animation.gif">
 </p>
 <h3 align="center">A handy CloneHero library management tool with a built in Chorus client.</h3>
+<img align="center" src="https://img.itch.zone/aW1hZ2UvMzc4NTIxLzE5MTU4NTQucG5n/original/6MTZt0.png" />
 <p align="center">
   <a href="https://topherlicious.itch.io/bridge">itch.io</a> | 
   <a href="https://trello.com/b/gC0cZDuX/bridge">Trello</a>
