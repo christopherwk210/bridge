@@ -6,7 +6,7 @@
 <p align="center">
   <a href="https://topherlicious.itch.io/bridge">itch.io</a> | 
   <a href="https://trello.com/b/gC0cZDuX/bridge">Trello</a> | 
-  <a href="https://discord.gg/UABebr">Discord</a> | 
+  <a href="https://discord.gg/tAaj8q">Discord</a> | 
   <a href="https://www.patreon.com/cloneherobridge">Patreon</a>
 </p>
 <hr>

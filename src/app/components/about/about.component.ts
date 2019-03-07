@@ -12,6 +12,7 @@ export class AboutComponent implements OnInit {
   itchLink = 'https://topherlicious.itch.io/bridge';
   trelloLink = 'https://trello.com/b/gC0cZDuX/bridge';
   patreonLink = 'https://www.patreon.com/cloneherobridge';
+  discordLink = 'https://discord.gg/tAaj8q';
 
   constructor(private remoteService: RemoteService, public settingsService: SettingsService) { }
 
