@@ -27,3 +27,11 @@ Key:
 - ✅ Complete
 - ⚠️ In progress
 - ❌ Not yet started
+
+### Development
+
+After cloning, install dependencies and run development with:
+
+```
+$ npm install && npm start
+```
