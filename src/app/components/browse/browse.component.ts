@@ -133,7 +133,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   async handleDownloadClicked(song: SongResult) {
     console.log(song);
 
-    if (!this.settingsService.chartLibraryDirectory) {
+    if (!this.settingsService.localSettings.chartLibraryDirectory) {
       const response = await this.modal.showModal([
         {
           class: 'ui cancel inverted button',

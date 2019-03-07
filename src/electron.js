@@ -1,4 +1,5 @@
-// Imports
+const pkg = require('./package.json');
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 const fs = require('fs');
@@ -157,3 +158,5 @@ ipcMain.on('save-settings', (e, settings) => {
 
   e.returnValue = true;
 });
+
+ipcMain.on('request-version', e => e.returnValue = pkg.version);

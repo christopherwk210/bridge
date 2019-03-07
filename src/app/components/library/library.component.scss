@@ -3,3 +3,25 @@
   padding: 2em;
   overflow-y: scroll;
 }
+
+.error-msg {
+  position: absolute;
+  width: 100%;
+
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-size: 1.25em;
+  opacity: 0.4;
+
+  p {
+    text-align: center;
+  }
+
+  p:first-child {
+    margin-bottom: 0.3em;
+    font-size: 5em;
+  }
+}

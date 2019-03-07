@@ -8,6 +8,7 @@ type ViewMode = 'details' | 'grid' | 'compact';
 interface LocalSettings {
   browseSortType: SortType;
   browseViewMode: ViewMode;
+  chartLibraryDirectory: string;
 }
 
 @Injectable({
@@ -19,7 +20,9 @@ export class SettingsService {
   browseCurrentSongResults: SongResult[] = [];
   browseCurrentSearchQuery = '';
 
-  chartLibraryDirectory = '';
+  downloadsCurrent: any[] = [];
+
+  version: string;
 
   constructor(private remoteService: RemoteService) { }
 
@@ -31,6 +34,10 @@ export class SettingsService {
     } catch (e) {
       //
     }
+
+    this.localSettings.chartLibraryDirectory = this.localSettings.chartLibraryDirectory || '';
+
+    this.version = this.remoteService.sendIPCSync('request-version');
 
     return true;
   }

@@ -1,6 +1,6 @@
 {
   "name": "bridge",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A handy CloneHero library management tool with a built in Chorus client.",
   "scripts": {
     "ng": "ng",

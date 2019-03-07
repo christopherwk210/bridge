@@ -1,3 +1,5 @@
-<p>
-  library works!
-</p>
+<div *ngIf="!settingsService.localSettings.chartLibraryDirectory" class="error-msg">
+  <p><i class="exclamation icon"></i></p>
+  <p>No chart library directory chosen!</p>
+  <p>Go to Settings to choose one.</p>
+</div>

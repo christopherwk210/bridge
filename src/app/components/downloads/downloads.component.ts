@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-downloads',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DownloadsComponent implements OnInit {
 
-  constructor() { }
+  constructor(public settingsService: SettingsService) { }
 
   ngOnInit() {
   }

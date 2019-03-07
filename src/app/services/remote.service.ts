@@ -28,8 +28,8 @@ export class RemoteService {
     this.ipcRenderer.send(channel, ...args);
   }
 
-  sendIPCSync(channel: string, ...args: any[]) {
-    this.ipcRenderer.sendSync(channel, ...args);
+  sendIPCSync(channel: string, ...args: any[]): any {
+    return this.ipcRenderer.sendSync(channel, ...args);
   }
 
   talkIPC(responseChannel: string, sendChannel: string, ...args: any[]): Promise<{ event: electron.IpcMessageEvent, args: any[] }> {

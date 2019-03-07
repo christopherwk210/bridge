@@ -3,3 +3,15 @@
   padding: 2em;
   overflow-y: scroll;
 }
+
+.no-downloads {
+  font-size: 1.25em;
+  opacity: 0.5;
+  text-align: center;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}

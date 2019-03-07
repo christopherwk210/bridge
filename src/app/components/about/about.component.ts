@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RemoteService } from 'src/app/services/remote.service';
+import { RemoteService } from '../../services/remote.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
   selector: 'app-about',
@@ -10,7 +11,7 @@ export class AboutComponent implements OnInit {
   githubLink = 'https://github.com/christopherwk210/bridge';
   itchLink = 'https://topherlicious.itch.io/bridge';
 
-  constructor(private remoteService: RemoteService) { }
+  constructor(private remoteService: RemoteService, public settingsService: SettingsService) { }
 
   ngOnInit() {
   }
