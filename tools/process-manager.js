@@ -42,7 +42,7 @@ let ng, electron;
 function createElectron() {
   console.log(`Launching Electron...${escapes.reset}`);
   
-  electron = child_process.spawn('electron', ['./src', '-dev']);
+  electron = child_process.spawn('node_modules/.bin/electron', ['./src', '-dev']);
 
   // Handle Electron outputs
   electron.stdout.on('data', data => console.log(`${escapes.cyan}Electron:\n${escapes.reset}${data}`));
@@ -60,7 +60,7 @@ function createAngular(launchElectron) {
 
   console.log(`Launching Angular...${escapes.reset}`);
 
-  ng = child_process.spawn('ng', ['serve', '--port', '1234']);
+  ng = child_process.spawn('node_modules/.bin/ng', ['serve', '--port', '1234']);
 
   // Handle Angular CLI outputs
   ng.stdout.on('data', data => {
