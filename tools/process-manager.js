@@ -27,7 +27,7 @@ const escapes = {
 
 const BIN_ROOT = path.resolve(__dirname, '..', 'node_modules', '.bin');
 const spawn = (program, args) => {
-  if (process.platform.match(/win/)) {
+  if (process.platform.match(/^win/)) {
     return child_process.spawn('cmd.exe', [
       "/c",
       path.join(BIN_ROOT, program + '.cmd'),
