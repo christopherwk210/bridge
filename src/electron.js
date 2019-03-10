@@ -8,7 +8,6 @@ const path = require('path');
 
 const dataPath = app.getPath('userData');
 const settingsPath = path.join(dataPath, 'settings.json');
-const cachePath = path.join(dataPath, 'cache');
 
 const initialSettings = {
   browseSortType: 0,
