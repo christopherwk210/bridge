@@ -3,6 +3,8 @@
  */
 
 const child_process = require('child_process');
+const path = require('path');
+const os = require('os');
 const stdin = process.stdin;
 
 stdin.setRawMode(true);
@@ -21,6 +23,22 @@ const escapes = {
   cyanBackground: '\x1b[46m',
   black: '\x1b[30m',
   clear: '\033c'
+}
+
+const BIN_ROOT = path.resolve(__dirname, '..', 'node_modules', '.bin');
+const spawn = (program, args) => {
+  if (process.platform.match(/^win/)) {
+    return child_process.spawn('cmd.exe', [
+      "/c",
+      path.join(BIN_ROOT, program + '.cmd'),
+      ...args
+    ]);
+  } else {
+    return child_process.spawn(
+      path.join(BIN_ROOT, program),
+      args
+    );
+  }
 }
 
 function showHelp() {
@@ -42,7 +60,7 @@ let ng, electron;
 function createElectron() {
   console.log(`Launching Electron...${escapes.reset}`);
   
-  electron = child_process.spawn('node_modules/.bin/electron', ['./src', '-dev']);
+  electron = spawn('electron', ['./src', '-dev']);
 
   // Handle Electron outputs
   electron.stdout.on('data', data => console.log(`${escapes.cyan}Electron:\n${escapes.reset}${data}`));
@@ -60,7 +78,7 @@ function createAngular(launchElectron) {
 
   console.log(`Launching Angular...${escapes.reset}`);
 
-  ng = child_process.spawn('node_modules/.bin/ng', ['serve', '--port', '1234']);
+  ng = spawn('ng', ['serve', '--port', '1234']);
 
   // Handle Angular CLI outputs
   ng.stdout.on('data', data => {
