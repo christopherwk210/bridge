@@ -1,12 +1,13 @@
 const pkg = require('./package.json');
 
 const { app, BrowserWindow, ipcMain } = require('electron');
+const request = require('request');
 
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
 
-const dataPath = app.getPath('userData');
+const dataPath = path.join(app.getPath('userData'), 'bridge_data');
 const settingsPath = path.join(dataPath, 'settings.json');
 const cachePath = path.join(dataPath, 'cache');
 
@@ -132,6 +133,9 @@ ipcMain.on('request-initial-load', e => {
   try {
     const dataPathExists = fs.existsSync(dataPath);
     if (!dataPathExists) fs.mkdirSync(dataPath);
+
+    const cachePathExists = fs.existsSync(cachePath);
+    if (!cachePathExists) fs.mkdirSync(cachePath);
   
     const settingsExists = fs.existsSync(settingsPath);
     if (!settingsExists) {
@@ -160,3 +164,32 @@ ipcMain.on('save-settings', (e, settings) => {
 });
 
 ipcMain.on('request-version', e => e.returnValue = pkg.version);
+
+ipcMain.on('cache-save-images', (e, args) => {
+  const songs = args[0];
+  const count = songs.length;
+  let completed = 0;
+
+  function completedSong(song, path) {
+    song.imageLoaded = true;
+    song.cacheImagePath = path;
+
+    if (++completed === count) {
+      e.sender.send('cache-images-saved', songs);
+    }
+  }
+
+  for (let song of songs) {
+    const imagePath = song.directLinks['album.png'];
+    const absolutePath = path.join(cachePath, path.basename(imagePath) + '.png');
+
+    const imageExists = fs.existsSync(absolutePath);
+    if (imageExists) {
+      completedSong(song, absolutePath);
+    } else {
+      request(imagePath).pipe(fs.createWriteStream(absolutePath)).on('close', () => {
+        completedSong(song, absolutePath);
+      });
+    }
+  }
+});

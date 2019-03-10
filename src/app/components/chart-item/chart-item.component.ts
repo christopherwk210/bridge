@@ -15,8 +15,7 @@ export class ChartItemComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   formatSeconds(time: number) {
     const minutes = Math.floor(time / 60);

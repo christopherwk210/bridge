@@ -1,4 +1,6 @@
 export interface SongResult {
+  id: number;
+
   name: string;
   album: string;
   artist: string;
@@ -59,4 +61,5 @@ export interface SongResult {
 
   /** Added metadata */
   imageLoaded: boolean;
+  cacheImagePath: string;
 }

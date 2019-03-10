@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SongResult } from '../shared/interfaces/song-result.interface';
 import { SortType } from '../shared/sort-type';
 import { RemoteService } from './remote.service';
+import { CacheService } from './cache.service';
 
 type ViewMode = 'details' | 'grid' | 'compact';
 
@@ -17,14 +18,14 @@ interface LocalSettings {
 export class SettingsService {
   localSettings: LocalSettings;
 
-  browseCurrentSongResults: SongResult[] = [];
+  private localbrowseCurrentSongResults: SongResult[] = [];
   browseCurrentSearchQuery = '';
 
   downloadsCurrent: any[] = [];
 
   version: string;
 
-  constructor(private remoteService: RemoteService) { }
+  constructor(private remoteService: RemoteService, private cacheService: CacheService) { }
 
   /**
    * Should be called once at start of application. Loads all local user settings
@@ -51,6 +52,26 @@ export class SettingsService {
    */
   saveSettings() {
     this.remoteService.sendIPCSync('save-settings', this.localSettings);
+  }
+
+  private async checkForImages(songs: SongResult[]) {
+    const songsWithImages = songs.filter(song => !!song.directLinks['album.png']);
+    const updatedSongs = await this.cacheService.saveSongsImagesToCache(songsWithImages);
+
+    this.localbrowseCurrentSongResults = this.localbrowseCurrentSongResults.map(song => {
+      const updatedSong = updatedSongs.find(searchedUpdatedSong => searchedUpdatedSong.id === song.id);
+      return updatedSong ? updatedSong : song;
+    });
+  }
+
+  appendCurrentSongResults(newSongs: SongResult[]) {
+    this.localbrowseCurrentSongResults.push(...newSongs);
+    this.checkForImages(newSongs);
+  }
+  get browseCurrentSongResults() { return this.localbrowseCurrentSongResults; }
+  set browseCurrentSongResults(newSongs: SongResult[]) {
+    this.localbrowseCurrentSongResults = newSongs;
+    this.checkForImages(newSongs);
   }
 
   get browseSortType() { return this.localSettings.browseSortType; }
