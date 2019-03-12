@@ -43,4 +43,8 @@ export class ChartItemComponent implements OnInit {
 
     return result;
   }
+
+  albumArt(song: SongResult) {
+    return song.directLinks['album.png'] || song.directLinks['album.jpg'];
+  }
 }

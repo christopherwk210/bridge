@@ -30,8 +30,8 @@
   <div class="item appearanim" [style.animationDelay]="(0.05 * i) + 's'" *ngFor="let item of data; let i = index">
 
     <div class="image">
-      <div class="album-img appearanim" *ngIf="item.directLinks['album.png'] && item.imageLoaded" [style.backgroundImage]="'url(' + item.directLinks['album.png'] + ')'"></div>
-      <img style="display: none" *ngIf="item.directLinks['album.png']" [src]="item.directLinks['album.png']" (load)="item.imageLoaded = true">
+      <div class="album-img appearanim" *ngIf="albumArt(item) && item.imageLoaded" [style.backgroundImage]="'url(' + albumArt(item) + ')'"></div>
+      <img style="display: none" *ngIf="albumArt(item)" [src]="albumArt(item)" (load)="item.imageLoaded = true">
       <img class="placeholder-image" [style.opacity]="item.imageLoaded ? 0 : 0.5" src="./assets/images/placeholder.jpg">
     </div>
 
@@ -74,9 +74,9 @@
         </div>
       </div>
 
-      <div class="album-img appearanim" *ngIf="item.directLinks['album.png'] && item.imageLoaded" [style.backgroundImage]="'url(' + item.directLinks['album.png'] + ')'"></div>
-      <img style="display: none" *ngIf="item.directLinks['album.png']" [src]="item.directLinks['album.png']" (load)="item.imageLoaded = true">
-      <img class="placeholder-image" src="./assets/images/placeholder.jpg">
+      <div class="album-img appearanim" *ngIf="albumArt(item) && item.imageLoaded" [style.backgroundImage]="'url(' + albumArt(item) + ')'"></div>
+      <img style="display: none" *ngIf="albumArt(item)" [src]="albumArt(item)" (load)="item.imageLoaded = true">
+      <img class="placeholder-image" [style.opacity]="item.imageLoaded ? 0 : 0.5" src="./assets/images/placeholder.jpg">
     </div>
 
     <div class="content">

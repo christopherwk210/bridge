@@ -8,6 +8,7 @@ export interface SongResult {
   directLinks?: {
     archive?: string;
     'album.png'?: string;
+    'album.jpg'?: string;
     chart?: string;
     ini?: string;
     'song.mp3'?: string;
