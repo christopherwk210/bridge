@@ -10,6 +10,7 @@ import { SortType, sortTypeReadable } from '../../shared/sort-type';
 import * as sortFunctions from '../../shared/song-result-sorts';
 
 import { ModalComponent } from '../modal/modal.component';
+import { RemoteService } from 'src/app/services/remote.service';
 
 @Component({
   selector: 'app-browse',
@@ -28,8 +29,12 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   loading: boolean;
   sortTypeReadables = sortTypeReadable;
 
-  constructor(private api: ApiService, public settingsService: SettingsService, private router: Router) {
-  }
+  constructor(
+    private api: ApiService,
+    public settingsService: SettingsService,
+    private router: Router,
+    private remoteService: RemoteService
+  ) {}
 
   ngOnInit() {
     if (!this.settingsService.browseCurrentSongResults || !this.settingsService.browseCurrentSongResults.length) this.loadLatestData();
@@ -134,8 +139,6 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   async handleDownloadClicked(song: SongResult) {
-    console.log(song);
-
     if (!this.settingsService.chartLibraryDirectory) {
       const response = await this.modal.showModal([
         {
@@ -151,6 +154,14 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       if (response === 1) this.router.navigate(['/settings']);
     } else {
       // Download code goes here
+
+      if (song.directLinks.archive) {
+        this.remoteService.sendIPC('add-new-download', song.directLinks.archive);
+        this.remoteService.ipcRenderer.on('downloads-updated', (e, args) => {
+          console.log(args);
+        });
+      }
+
     }
   }
 

@@ -1,13 +1,16 @@
 const pkg = require('./package.json');
 
+const DownloadManager = require('./download-manager');
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
 
-const dataPath = app.getPath('userData');
+const dataPath = path.join(app.getPath('userData'), 'bridge_data');
 const settingsPath = path.join(dataPath, 'settings.json');
+const tempPath = path.join(dataPath, 'temp');
 
 const initialSettings = {
   browseSortType: 0,
@@ -131,6 +134,9 @@ ipcMain.on('request-initial-load', e => {
   try {
     const dataPathExists = fs.existsSync(dataPath);
     if (!dataPathExists) fs.mkdirSync(dataPath);
+
+    const tempPathExists = fs.existsSync(tempPath);
+    if (!tempPathExists) fs.mkdirSync(tempPath);
   
     const settingsExists = fs.existsSync(settingsPath);
     if (!settingsExists) {
@@ -159,3 +165,8 @@ ipcMain.on('save-settings', (e, settings) => {
 });
 
 ipcMain.on('request-version', e => e.returnValue = pkg.version);
+
+const dm = new DownloadManager(currentDownloads => mainWindow.webContents.send('downloads-updated', currentDownloads));
+ipcMain.on('add-new-download', (e, download) => {
+  dm.addDownload(download, tempPath);
+});
