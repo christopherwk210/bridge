@@ -139,6 +139,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   async handleDownloadClicked(song: SongResult) {
+    console.log(song);
     if (!this.settingsService.chartLibraryDirectory) {
       const response = await this.modal.showModal([
         {
@@ -153,15 +154,11 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
       if (response === 1) this.router.navigate(['/settings']);
     } else {
-      // Download code goes here
-
       if (song.directLinks.archive) {
         this.remoteService.sendIPC('add-new-download', song.directLinks.archive);
-        this.remoteService.ipcRenderer.on('downloads-updated', (e, args) => {
-          console.log(args);
-        });
+      } else {
+        //
       }
-
     }
   }
 

@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ApiService } from './services/api.service';
 import { RemoteService } from './services/remote.service';
 import { SettingsService } from './services/settings.service';
+import { DownloadService } from './services/download.service';
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
@@ -39,7 +40,8 @@ import { ModalComponent } from './components/modal/modal.component';
   providers: [
     ApiService,
     RemoteService,
-    SettingsService
+    SettingsService,
+    DownloadService
   ],
   bootstrap: [AppComponent]
 })

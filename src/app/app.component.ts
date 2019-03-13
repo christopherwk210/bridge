@@ -1,5 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { RemoteService } from './services/remote.service';
+import { DownloadService } from './services/download.service';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ export class AppComponent implements AfterViewInit {
   appLoading = true;
   hideLoader = false;
 
-  constructor(private remoteService: RemoteService)  {
+  constructor(private remoteService: RemoteService, private downloadService: DownloadService)  {
   }
 
   onLoad() {
