@@ -3,3 +3,9 @@
   <p>No chart library directory chosen!</p>
   <p>Go to Settings to choose one.</p>
 </div>
+
+<div *ngIf="settingsService.chartLibraryDirectory" class="error-msg">
+  <p><i class="exclamation icon"></i></p>
+  <p>You haven't scanned your library yet!</p>
+  <p><button class="ui teal button" (click)="scanLibrary()">Scan Now</button></p>
+</div>

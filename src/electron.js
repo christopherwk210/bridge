@@ -1,6 +1,7 @@
 const pkg = require('./package.json');
 
-const DownloadManager = require('./download-manager');
+const DownloadManager = require('./assets/electron/download-manager');
+const walk = require('./assets/electron/walk');
 
 const { app, BrowserWindow, ipcMain } = require('electron');
 
@@ -169,4 +170,13 @@ ipcMain.on('request-version', e => e.returnValue = pkg.version);
 const dm = new DownloadManager(currentDownloads => mainWindow.webContents.send('downloads-updated', currentDownloads));
 ipcMain.on('add-new-download', (e, download) => {
   dm.addDownload(download, tempPath);
+});
+
+async function scanLibrary(libraryDirectory) {
+  const results = await walk(libraryDirectory);
+  return results;
+}
+ipcMain.on('scan-library', async (e, path) => {
+  const result = await scanLibrary(path[0]);
+  e.sender.send('scan-complete', result);
 });
