@@ -1,3 +1,11 @@
+body ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+body ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
 app-browse, app-downloads, app-library, app-settings, app-about {
   background-color: #1E1E1E;
   color: #CCCCCC !important;
@@ -9,6 +17,10 @@ app-browse, app-downloads, app-library, app-settings, app-about {
 
 .ui.inverted.dimmer .ui.loader, .ui.loader {
   color: #888888 !important;
+}
+
+.ui.segment {
+  background: #3C3C3C;
 }
 
 /* Loading */
@@ -81,4 +93,15 @@ app-app-loading svg .st0 {
 
 .ui.buttons .button {
   margin: 0 0 0 -2px;
+}
+
+.ui.green.button, .ui.green.buttons .button {
+  background-color: transparent;
+  box-shadow: 0 0 0 2px #21BA45 inset !important;
+  color: #21BA45;
+  text-shadow: none !important;
+}
+.ui.green.button:hover, .ui.green.buttons .button:hover {
+  background-color: #21BA45;
+  color: white;
 }
