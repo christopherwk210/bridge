@@ -11,7 +11,8 @@
     "e2e": "ng e2e",
     "package.win": "electron-packager ./dist/bridge bridge --arch=ia32,x64 --asar --icon=./src/assets/images/system/icons/win/icon.ico --out=./bin/win --overwrite --platform=win32",
     "package.mac": "electron-packager ./dist/bridge bridge --arch=x64 --asar --icon=./src/assets/images/system/icons/mac/icon.icns --out=./bin/mac --overwrite --platform=darwin",
-    "package.linux": "electron-packager ./dist/bridge bridge --arch=x64 --asar --out=./bin/linux --overwrite --platform=linux"
+    "package.linux": "electron-packager ./dist/bridge bridge --arch=x64 --asar --out=./bin/linux --overwrite --platform=linux",
+    "setup": "npm "
   },
   "private": true,
   "dependencies": {
@@ -27,7 +28,6 @@
     "jquery": "^3.3.1",
     "request": "^2.88.0",
     "rxjs": "~6.3.3",
-    "semantic-ui": "^2.4.2",
     "tslib": "^1.9.0",
     "vivus": "^0.4.4",
     "zone.js": "~0.8.26"

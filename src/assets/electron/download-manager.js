@@ -20,6 +20,8 @@ class DownloadManager {
     req.on('response', res => {
       const filenameRegex = /filename="([^"]+)"/g;
 
+      console.log(res);
+
       currentDownload.id = ++this.lastID;
       currentDownload.fileName = filenameRegex.exec(res.headers['content-disposition'])[1];
       currentDownload.fileType = res.headers['content-type'];
