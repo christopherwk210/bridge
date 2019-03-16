@@ -15,3 +15,14 @@
   top: 50%;
   transform: translateY(-50%);
 }
+
+.bar {
+  transition: width .4s ease, background-color .4s ease, min-width .1s ease !important;
+}
+
+.clear-button {
+  position: absolute;
+  right: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+}

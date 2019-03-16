@@ -12,6 +12,7 @@ export class AppComponent implements AfterViewInit {
   hideLoader = false;
 
   constructor(private remoteService: RemoteService, private downloadService: DownloadService)  {
+    this.downloadService.listenForUpdates();
   }
 
   onLoad() {

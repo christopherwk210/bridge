@@ -13,6 +13,9 @@ export interface SongResult {
     ini?: string;
     'song.mp3'?: string;
     'song.ogg'?: string;
+
+    'guitar.mp3'?: string;
+    'guitar.ogg'?: string;
   };
   link: string;
 

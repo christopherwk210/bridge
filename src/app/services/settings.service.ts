@@ -20,8 +20,6 @@ export class SettingsService {
   browseCurrentSongResults: SongResult[] = [];
   browseCurrentSearchQuery = '';
 
-  downloadsCurrent: any[] = [];
-
   version: string;
 
   constructor(private remoteService: RemoteService) { }

@@ -4,7 +4,7 @@
       <span class="header">{{item.name}}</span>
 
       <div class="meta">
-        <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
+        <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year && item.year.trim()">({{item.year}})</span></p>
         <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
       </div>
 
@@ -39,7 +39,7 @@
       <span class="header">{{item.name}}</span>
 
       <div class="meta">
-        <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
+        <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year && item.year.trim()">({{item.year}})</span></p>
         <p>{{item.genre}}</p>
         <p>{{formatSeconds(item.length)}} ({{formatSeconds(item.effectiveLength)}})</p>
         <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
@@ -82,7 +82,7 @@
     <div class="content">
       <span class="header">{{item.name}}</span>
       <div class="meta">
-        <p style="margin-top: 0.5em;"><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year">({{item.year}})</span></p>
+        <p style="margin-top: 0.5em;"><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year && item.year.trim()">({{item.year}})</span></p>
         <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
       </div>
     </div>

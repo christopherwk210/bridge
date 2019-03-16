@@ -1,3 +1,15 @@
-<div *ngIf="!settingsService.downloadsCurrent.length" class="no-downloads">
+<div *ngIf="!downloadService.currentDownloads.length" class="no-downloads">
   No active downloads!
+</div>
+
+<div class="segment-list" *ngIf="downloadService.currentDownloads.length">
+  <div class="ui segment" *ngFor="let download of downloadService.currentDownloads">
+    <h4 style="margin-bottom: 0;">{{download.fileName}}</h4>
+    <button *ngIf="download.percent === 100" class="ui tiny green icon button clear-button" (click)="clearDownload(download.id)">
+      <i class="check icon"></i>
+    </button>
+    <div class="ui bottom attached indicating progress">
+      <div [style.minWidth]="download.percent + '%'" [style.background]="download.percent === 100 ? '#21BA45' : '#FBBD09'" class="bar"></div>
+    </div>
+  </div>
 </div>

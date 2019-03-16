@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { RemoteService } from './remote.service';
 
 interface RemoteDownload {
@@ -9,18 +9,72 @@ interface RemoteDownload {
   downloaded: number;
 }
 
+interface Download {
+  id: number;
+  fileName: string;
+  fileType: string;
+  fileSize?: string;
+  downloaded: number;
+  percent?: number;
+  done?: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class DownloadService {
+  currentDownloads: Download[] = [];
 
-  constructor(private remoteService: RemoteService) { }
+  constructor(private remoteService: RemoteService, private zone: NgZone) { }
 
   listenForUpdates() {
     this.remoteService.ipcRenderer.on('downloads-updated', (e, args) => this.handleUpdate(args));
   }
 
   handleUpdate(remoteDownloads: RemoteDownload[]) {
-    console.log(remoteDownloads);
+    remoteDownloads.forEach(remoteDownload => {
+      const index = this.currentDownloads.findIndex(download => download.id === remoteDownload.id);
+      if (index > -1) {
+        this.zone.run(() => {
+          this.currentDownloads[index].downloaded = remoteDownload.downloaded;
+          this.currentDownloads[index].percent = this.downloadPercent(this.currentDownloads[index]);
+        });
+      } else {
+        const convertedDownload: Download = remoteDownload;
+        convertedDownload.percent = 0;
+
+        this.zone.run(() => {
+          this.currentDownloads.push(convertedDownload);
+        });
+      }
+    });
+
+    this.zone.run(() => {
+      this.currentDownloads = this.currentDownloads.map(download => {
+        const remoteIndex = remoteDownloads.findIndex(remoteDownload => download.id === remoteDownload.id);
+        if (remoteIndex === -1) {
+          download.done = true;
+          download.percent = 100;
+        }
+        return download;
+      });
+    });
+  }
+
+  removeFinishedDownload(id: number) {
+    this.currentDownloads = this.currentDownloads.filter(download => {
+      if (download.id === id) {
+        if (download.done || download.downloaded === parseInt(download.fileSize)) {
+          return false;
+        }
+      }
+
+      return true;
+    });
+  }
+
+  downloadPercent(download: Download) {
+    if (!download.fileSize) return download.done ? 100 : 99.9;
+    return Math.ceil((download.downloaded / parseInt(download.fileSize)) * 100);
   }
 }

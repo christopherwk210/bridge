@@ -9,6 +9,7 @@ class DownloadManager {
   constructor(onUpdate) {
     this.onUpdateCallback = onUpdate;
     this.currentDownloads = [];
+    this.requests = {};
     this.lastID = 0;
   }
 
@@ -20,13 +21,14 @@ class DownloadManager {
     req.on('response', res => {
       const filenameRegex = /filename="([^"]+)"/g;
 
-      console.log(res.headers);
-
       currentDownload.id = ++this.lastID;
+
+      this.requests[currentDownload.id] = req;
 
       if (res.headers['server'] && res.headers['server'] === 'cloudflare') {
         // Cloudflare specific jazz
-        currentDownload.fileName = 'temp' + currentDownload.id;
+        // currentDownload.fileName = 'temp' + currentDownload.id;
+        currentDownload.fileName = decodeURIComponent( path.basename(url) );
       } else {
         // GDrive specific jazz
         currentDownload.fileName = filenameRegex.exec(res.headers['content-disposition'])[1];
@@ -55,6 +57,10 @@ class DownloadManager {
       this.currentDownloads = this.currentDownloads.filter(download => download.id !== currentDownload.id);
       this.onUpdateCallback(this.currentDownloads);
     });
+  }
+
+  cancelDownload(id) {
+    this.requests[id].destroy();
   }
 }
 
