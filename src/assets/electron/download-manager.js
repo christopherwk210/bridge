@@ -20,10 +20,18 @@ class DownloadManager {
     req.on('response', res => {
       const filenameRegex = /filename="([^"]+)"/g;
 
-      console.log(res);
+      console.log(res.headers);
 
       currentDownload.id = ++this.lastID;
-      currentDownload.fileName = filenameRegex.exec(res.headers['content-disposition'])[1];
+
+      if (res.headers['server'] && res.headers['server'] === 'cloudflare') {
+        // Cloudflare specific jazz
+        currentDownload.fileName = 'temp' + currentDownload.id;
+      } else {
+        // GDrive specific jazz
+        currentDownload.fileName = filenameRegex.exec(res.headers['content-disposition'])[1];
+      }
+
       currentDownload.fileType = res.headers['content-type'];
       currentDownload.fileSize = res.headers['content-length'];
       currentDownload.downloaded = 0;
