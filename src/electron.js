@@ -12,6 +12,7 @@ const path = require('path');
 const dataPath = path.join(app.getPath('userData'), 'bridge_data');
 const settingsPath = path.join(dataPath, 'settings.json');
 const tempPath = path.join(dataPath, 'temp');
+const themesPath = path.join(dataPath, 'themes');
 
 const initialSettings = {
   browseSortType: 0,
@@ -138,6 +139,9 @@ ipcMain.on('request-initial-load', e => {
 
     const tempPathExists = fs.existsSync(tempPath);
     if (!tempPathExists) fs.mkdirSync(tempPath);
+
+    const themesPathExists = fs.existsSync(themesPath);
+    if (!themesPathExists) fs.mkdirSync(themesPath);
   
     const settingsExists = fs.existsSync(settingsPath);
     if (!settingsExists) {
