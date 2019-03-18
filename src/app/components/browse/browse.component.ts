@@ -154,20 +154,9 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
       if (response === 1) this.router.navigate(['/settings']);
     } else {
-      if (song.directLinks.archive) {
-        this.remoteService.sendIPC('add-new-download', song.directLinks.archive);
-      } else {
-        const albumArt = song.directLinks['album.jpg'] || song.directLinks['album.png'];
-        const audio = song.directLinks['song.ogg'] || song.directLinks['song.mp3'];
-        const guitarAudio = song.directLinks['guitar.ogg'] || song.directLinks['guitar.mp3'];
-
-        if (albumArt) this.remoteService.sendIPC('add-new-download', albumArt);
-        if (audio) this.remoteService.sendIPC('add-new-download', audio);
-        if (guitarAudio) this.remoteService.sendIPC('add-new-download', guitarAudio);
-
-        if (song.directLinks.chart) this.remoteService.sendIPC('add-new-download', song.directLinks.chart);
-        if (song.directLinks.ini) this.remoteService.sendIPC('add-new-download', song.directLinks.ini);
-      }
+      Object.keys(song.directLinks).forEach(link => {
+        this.remoteService.sendIPC('add-new-download', song.directLinks[link]);
+      });
     }
   }
 

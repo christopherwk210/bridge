@@ -87,6 +87,13 @@ app-app-loading svg .st0 {
   color: white;
 }
 
+.ui.teal.button:active, .ui.teal.buttons .button:active {
+  background-color: #00827c !important;
+  box-shadow: 0 0 0 2px #00827c inset !important;
+  color: #fff;
+  text-shadow: none;
+}
+
 .ui.buttons .button:first-child {
   margin-left: 0;
 }
