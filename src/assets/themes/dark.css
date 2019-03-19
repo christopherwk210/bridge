@@ -11,6 +11,10 @@ app-browse, app-downloads, app-library, app-settings, app-about {
   color: #CCCCCC !important;
 }
 
+app-about img.logo {
+  filter: drop-shadow(0 0px 14px white);
+}
+
 .ui.dimmer {
   background: rgba(0,0,0,0.85) !important;
 }
@@ -21,6 +25,10 @@ app-browse, app-downloads, app-library, app-settings, app-about {
 
 .ui.segment {
   background: #3C3C3C;
+}
+
+.ui.header, .ui.form .field>label, .ui.basic.button, .ui.basic.buttons .button {
+  color: #CCCCCC !important;
 }
 
 /* Loading */

@@ -46,6 +46,8 @@ export class SettingsService {
 
     this.version = this.remoteService.sendIPCSync('request-version');
 
+    this.changeTheme(this.theme);
+
     return true;
   }
 
