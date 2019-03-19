@@ -14,4 +14,11 @@
 <button style="margin-top: 0.5em;" (click)="clearCache()" class="ui button">Clear Cache</button>
 
 <h3 class="ui header">Theme</h3>
-<code>not yet implemented</code>
+<div #uiThemeDropdown class="ui selection dropdown mr">
+  <input type="hidden" name="sort" [value]="settingService.theme">
+  <i class="dropdown icon"></i>
+  <div class="default text">Default</div>
+  <div class="menu">
+    <div class="item" [attr.data-value]="i" *ngFor="let theme of settingService.builtinThemes; let i = index">{{theme}}</div>
+  </div>
+</div>

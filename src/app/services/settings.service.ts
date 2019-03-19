@@ -9,18 +9,23 @@ interface LocalSettings {
   browseSortType: SortType;
   browseViewMode: ViewMode;
   chartLibraryDirectory: string;
+  theme: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsService {
+  readonly builtinThemes = ['Default', 'Dark'];
+
   localSettings: LocalSettings;
 
   browseCurrentSongResults: SongResult[] = [];
   browseCurrentSearchQuery = '';
 
   version: string;
+
+  currentThemeLink: HTMLLinkElement;
 
   constructor(private remoteService: RemoteService) { }
 
@@ -51,6 +56,17 @@ export class SettingsService {
     this.remoteService.sendIPCSync('save-settings', this.localSettings);
   }
 
+  changeTheme(theme: string) {
+    if (this.currentThemeLink) this.currentThemeLink.remove();
+    if (theme === 'Default') return;
+
+    const link = document.createElement('link');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
+    link.href = `assets/themes/${theme}.css`;
+    this.currentThemeLink = document.head.appendChild(link);
+  }
+
   get browseSortType() { return this.localSettings.browseSortType; }
   set browseSortType(newValue: SortType) {
     this.localSettings.browseSortType = newValue;
@@ -66,6 +82,13 @@ export class SettingsService {
   get chartLibraryDirectory() { return this.localSettings.chartLibraryDirectory; }
   set chartLibraryDirectory(newValue: string) {
     this.localSettings.chartLibraryDirectory = newValue;
+    this.saveSettings();
+  }
+
+  get theme() { return this.localSettings.theme; }
+  set theme(newValue: string) {
+    this.localSettings.theme = newValue;
+    this.changeTheme(newValue);
     this.saveSettings();
   }
 }

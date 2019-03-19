@@ -16,7 +16,8 @@ const themesPath = path.join(dataPath, 'themes');
 
 const initialSettings = {
   browseSortType: 0,
-  browseViewMode: 'details'
+  browseViewMode: 'details',
+  theme: 'Default'
 };
 
 // Define a main window
