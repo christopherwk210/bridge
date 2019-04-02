@@ -20,6 +20,9 @@ interface Download {
   downloaded: number;
   percent?: number;
   done?: boolean;
+  artist: string;
+  song: string;
+  transfer?: boolean;
 }
 
 @Injectable({
@@ -32,6 +35,8 @@ export class DownloadService {
 
   listenForUpdates() {
     this.remoteService.ipcRenderer.on('downloads-updated', (e, args) => this.handleUpdate(args));
+    this.remoteService.ipcRenderer.on('transfer-failed', (e, args) => this.handleTransferFailed(args));
+    this.remoteService.ipcRenderer.on('transfer-completed', (e, args) => this.handleTransferCompleted(args));
   }
 
   handleUpdate(remoteDownloads: RemoteDownload[]) {
@@ -42,7 +47,7 @@ export class DownloadService {
           this.currentDownloads[index].downloaded = remoteDownload.downloaded;
           this.currentDownloads[index].percent = this.downloadPercent(this.currentDownloads[index]);
 
-          if (this.currentDownloads[index].percent === 100) this.handleFinishedDownload(remoteDownload);
+          // if (this.currentDownloads[index].percent === 100) this.handleFinishedDownload(this.currentDownloads[index]);
         });
       } else {
         const convertedDownload: Download = remoteDownload;
@@ -60,14 +65,26 @@ export class DownloadService {
         if (remoteIndex === -1) {
           download.done = true;
           download.percent = 100;
+
+          if (!download.transfer) this.handleFinishedDownload(download);
         }
         return download;
       });
     });
   }
 
-  handleFinishedDownload(remoteDownload: RemoteDownload) {
-    this.remoteService.sendIPC('download-finished', { remoteDownload, destination: this.settingsService.chartLibraryDirectory });
+  handleTransferFailed(response: { data: RemoteDownload, msg: string }) {
+    console.log(response);
+  }
+
+  handleTransferCompleted(response: { data: RemoteDownload }) {
+    console.log(response);
+  }
+
+  handleFinishedDownload(download: Download) {
+    console.log('downloaded', download);
+    download.transfer = true;
+    this.remoteService.sendIPC('download-finished', { remoteDownload: download, destination: this.settingsService.chartLibraryDirectory });
   }
 
   removeFinishedDownload(id: number) {

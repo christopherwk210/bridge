@@ -178,8 +178,53 @@ ipcMain.on('add-new-download', (e, data) => {
 });
 
 ipcMain.on('download-finished', (e, data) => {
-  const filePath = path.join(tempPath, data.remoteDownload.fileName);
-  const destination = path.join(data.destination, `${data.remoteDownload.artist} - ${data.remoteDownload.song}`, data.remoteDownload.fileName);
+  const tempFilePath = path.join(tempPath, data.remoteDownload.fileName);
+  const destinationFolder = path.join(data.destination, `${data.remoteDownload.artist} - ${data.remoteDownload.song}`);
+  const destinationFile = path.join(destinationFolder, data.remoteDownload.fileName);
+
+  fs.access(destinationFolder, fs.constants.F_OK, (err) => {
+    if (err) {
+      fs.mkdir(destinationFolder, mkdirErr => {
+        if (mkdirErr) {
+          mainWindow.webContents.send('transfer-failed', { data, msg: 'MKDIR_ERROR' });          
+        } else {
+          fs.copyFile(tempFilePath, destinationFile, copyErr => {
+            if (copyErr) {
+              mainWindow.webContents.send('transfer-failed', { data, msg: 'COPY_ERROR' });
+            } else {
+              fs.unlink(tempFilePath, unlinkErr => {
+                if (unlinkErr) {
+                  mainWindow.webContents.send('transfer-failed', { data, msg: 'UNLINK_ERROR' });
+                } else {
+                  mainWindow.webContents.send('transfer-completed', { data });
+                }
+              });
+            }
+          });
+        }
+      });
+    } else {
+      fs.access(destinationFile, fs.constants.F_OK, checkfileError => {
+        if (checkfileError) {
+          fs.copyFile(tempFilePath, destinationFile, copyErr => {
+            if (copyErr) {
+              mainWindow.webContents.send('transfer-failed', { data, msg: 'COPY_ERROR' });
+            } else {
+              fs.unlink(tempFilePath, unlinkErr => {
+                if (unlinkErr) {
+                  mainWindow.webContents.send('transfer-failed', { data, msg: 'UNLINK_ERROR' });
+                } else {
+                  mainWindow.webContents.send('transfer-completed', { data });
+                }
+              });
+            }
+          });
+        } else {
+          mainWindow.webContents.send('transfer-failed', { data, msg: 'FILE_EXISTS' });
+        }
+      });
+    }
+  });
 });
 
 async function scanLibrary(libraryDirectory) {
