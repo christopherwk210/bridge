@@ -177,6 +177,11 @@ ipcMain.on('add-new-download', (e, data) => {
   dm.addDownload(data, tempPath);
 });
 
+ipcMain.on('download-finished', (e, data) => {
+  const filePath = path.join(tempPath, data.remoteDownload.fileName);
+  const destination = path.join(data.destination, `${data.remoteDownload.artist} - ${data.remoteDownload.song}`, data.remoteDownload.fileName);
+});
+
 async function scanLibrary(libraryDirectory) {
   const results = await walk(libraryDirectory);
   return results;

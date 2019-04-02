@@ -1,5 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { RemoteService } from './remote.service';
+import { SettingsService } from './settings.service';
 
 interface RemoteDownload {
   id: number;
@@ -27,7 +28,7 @@ interface Download {
 export class DownloadService {
   currentDownloads: Download[] = [];
 
-  constructor(private remoteService: RemoteService, private zone: NgZone) { }
+  constructor(private remoteService: RemoteService, private settingsService: SettingsService, private zone: NgZone) { }
 
   listenForUpdates() {
     this.remoteService.ipcRenderer.on('downloads-updated', (e, args) => this.handleUpdate(args));
@@ -40,6 +41,8 @@ export class DownloadService {
         this.zone.run(() => {
           this.currentDownloads[index].downloaded = remoteDownload.downloaded;
           this.currentDownloads[index].percent = this.downloadPercent(this.currentDownloads[index]);
+
+          if (this.currentDownloads[index].percent === 100) this.handleFinishedDownload(remoteDownload);
         });
       } else {
         const convertedDownload: Download = remoteDownload;
@@ -61,6 +64,10 @@ export class DownloadService {
         return download;
       });
     });
+  }
+
+  handleFinishedDownload(remoteDownload: RemoteDownload) {
+    this.remoteService.sendIPC('download-finished', { remoteDownload, destination: this.settingsService.chartLibraryDirectory });
   }
 
   removeFinishedDownload(id: number) {
