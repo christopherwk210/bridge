@@ -186,7 +186,11 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       if (response === 1) this.router.navigate(['/settings']);
     } else {
       Object.keys(song.directLinks).forEach(link => {
-        this.remoteService.sendIPC('add-new-download', song.directLinks[link]);
+        this.remoteService.sendIPC('add-new-download', {
+          song: song.name,
+          artist: song.artist,
+          link: song.directLinks[link]
+        });
       });
     }
   }

@@ -13,8 +13,12 @@ class DownloadManager {
     this.lastID = 0;
   }
 
-  addDownload(url, outputDestination) {
-    let currentDownload = {};
+  addDownload(data, outputDestination) {
+    const url = data.link;
+    const song = data.song;
+    const artist = data.artist;
+
+    let currentDownload = { song, artist };
     let writeStream;
     const req = request.get(url);
 

@@ -173,8 +173,8 @@ ipcMain.on('save-settings', (e, settings) => {
 ipcMain.on('request-version', e => e.returnValue = pkg.version);
 
 const dm = new DownloadManager(currentDownloads => mainWindow.webContents.send('downloads-updated', currentDownloads));
-ipcMain.on('add-new-download', (e, download) => {
-  dm.addDownload(download, tempPath);
+ipcMain.on('add-new-download', (e, data) => {
+  dm.addDownload(data, tempPath);
 });
 
 async function scanLibrary(libraryDirectory) {

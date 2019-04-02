@@ -7,6 +7,8 @@ interface RemoteDownload {
   fileType: string;
   fileSize?: string;
   downloaded: number;
+  artist: string;
+  song: string;
 }
 
 interface Download {

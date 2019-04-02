@@ -4,7 +4,9 @@
 
 <div class="segment-list" *ngIf="downloadService.currentDownloads.length">
   <div class="ui segment" *ngFor="let download of downloadService.currentDownloads">
-    <h4 style="margin-bottom: 0;">{{download.fileName}}</h4>
+    <h4>{{download.song}} <span style="opacity: 0.5">({{download.artist}})</span></h4>
+    <h4 style="margin: 0 0.5em;">-</h4>
+    <h4>{{download.fileName}}</h4>
     <button *ngIf="download.percent === 100" class="ui tiny green icon button clear-button" (click)="clearDownload(download.id)">
       <i class="check icon"></i>
     </button>
