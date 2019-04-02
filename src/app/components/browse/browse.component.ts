@@ -37,7 +37,9 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    if (!this.settingsService.browseCurrentSongResults || !this.settingsService.browseCurrentSongResults.length) this.loadLatestData();
+    if (!this.settingsService.browseCurrentSongResults || !this.settingsService.browseCurrentSongResults.length) {
+      this.loadLatestData();
+    }
   }
 
   ngAfterViewInit() {
@@ -53,7 +55,9 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
     $(this.uiSortDropdown.nativeElement).dropdown({
       onChange: (value: string, text: string) => {
-        const actualValue = parseInt(value);
+        const actualValue = parseInt(value) || -1;
+        if (actualValue === this.settingsService.browseSortType) return;
+
         this.settingsService.browseSortType = actualValue;
 
         const tempResults = this.settingsService.browseCurrentSongResults.slice();
@@ -95,7 +99,9 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     await this.loadNewData('latest');
   }
 
-  async loadNewData(dataset: 'random' | 'latest') {
+  async loadNewData(dataset: 'random' | 'latest', from?: number) {
+    this.settingsService.from = from || 0;
+    this.settingsService.lastLoadedType = dataset;
 
     // Reset to newest sorting if currently unsorted
     if (this.settingsService.browseSortType === -1) {
@@ -106,7 +112,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     // Reset our search query, loading state, and current list of songs
     this.settingsService.browseCurrentSearchQuery = '';
     this.loading = true;
-    this.settingsService.browseCurrentSongResults = [];
+    if (!from) this.settingsService.browseCurrentSongResults = [];
 
     // Determine our dataset and request it
     let method;
@@ -115,27 +121,52 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       case 'latest': method = 'getLatest'; break;
     }
 
-    const result = await this.api[method]();
+    const result = await this.api[method](this.settingsService.from);
 
     // Save and sort the results
-    this.settingsService.browseCurrentSongResults = result.songs;
-    this.sortResults(this.settingsService.browseSortType);
+    if (from) {
+      this.settingsService.browseCurrentSongResults.push(...result.songs);
+    } else {
+      this.settingsService.browseCurrentSongResults = result.songs;
+    }
+    if (!from) this.sortResults(this.settingsService.browseSortType);
 
     this.loading = false;
   }
 
-  async loadBasicSearch(query: string) {
+  async loadBasicSearch(query: string, from?: number) {
     this.loading = true;
-    this.settingsService.browseCurrentSongResults = [];
+    if (!from) this.settingsService.browseCurrentSongResults = [];
+    this.settingsService.from = from || 0;
+    this.settingsService.lastLoadedType = 'search';
+    this.settingsService.lastQuery = query;
 
-    const result = await this.api.getBasicSearch(query);
-    this.settingsService.browseCurrentSongResults = result.songs;
+    const result = await this.api.getBasicSearch(query, this.settingsService.from);
+    if (from) {
+      this.settingsService.browseCurrentSongResults.push(...result.songs);
+    } else {
+      this.settingsService.browseCurrentSongResults = result.songs;
+    }
 
     $(this.uiSortDropdown.nativeElement).dropdown('clear');
     $(this.uiSortDropdown.nativeElement).dropdown('set text', 'Relevance');
     this.settingsService.browseSortType = -1;
 
     this.loading = false;
+  }
+
+  async loadMore() {
+    this.settingsService.from = this.settingsService.from + 20;
+
+    switch (this.settingsService.lastLoadedType) {
+      case 'latest':
+      case 'random':
+        await this.loadNewData(this.settingsService.lastLoadedType, this.settingsService.from);
+        break;
+      case 'search':
+        await this.loadBasicSearch(this.settingsService.lastQuery, this.settingsService.from);
+        break;
+    }
   }
 
   async handleDownloadClicked(song: SongResult) {

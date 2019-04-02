@@ -44,6 +44,8 @@
 
 <app-chart-item [data]="settingsService.browseCurrentSongResults" [mode]="settingsService.browseViewMode" (detailsClicked)="handleDetailClicked($event)" (downloadClicked)="handleDownloadClicked($event)"></app-chart-item>
 
+<button class="ui button" style="display: block; margin: 0 auto;" [style.opacity]="loading ? 0 : 1" (click)="loadMore()">Load more</button>
+
 <app-modal #modal title="Hold up" [basic]="true" icon="exclamation" size="tiny" [closable]="false">
   <p>You can't add any charts to your library until you choose a library directory!</p>
 </app-modal>

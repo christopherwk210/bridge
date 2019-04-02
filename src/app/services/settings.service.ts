@@ -8,6 +8,9 @@ type ViewMode = 'details' | 'grid' | 'compact';
 interface LocalSettings {
   browseSortType: SortType;
   browseViewMode: ViewMode;
+  lastLoadedType: 'latest' | 'random' | 'search';
+  lastQuery: string;
+  from: number;
   chartLibraryDirectory: string;
   theme: string;
 }
@@ -81,9 +84,27 @@ export class SettingsService {
     this.saveSettings();
   }
 
+  get lastLoadedType() { return this.localSettings.lastLoadedType; }
+  set lastLoadedType(newValue: 'latest' | 'random' | 'search') {
+    this.localSettings.lastLoadedType = newValue;
+    this.saveSettings();
+  }
+
   get chartLibraryDirectory() { return this.localSettings.chartLibraryDirectory; }
   set chartLibraryDirectory(newValue: string) {
     this.localSettings.chartLibraryDirectory = newValue;
+    this.saveSettings();
+  }
+
+  get lastQuery() { return this.localSettings.lastQuery; }
+  set lastQuery(newValue: string) {
+    this.localSettings.lastQuery = newValue;
+    this.saveSettings();
+  }
+
+  get from() { return this.localSettings.from; }
+  set from(newValue: number) {
+    this.localSettings.from = newValue;
     this.saveSettings();
   }
 

@@ -9,10 +9,10 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
-  getLatest(): Promise<any> {
+  getLatest(from?: number): Promise<any> {
     return new Promise(resolve => {
       let result;
-      this.http.get(`${this.url}/latest`).subscribe(
+      this.http.get(`${this.url}/latest?from=${from || 0}`).subscribe(
         success => result = success,
         err => result = err,
         () => {
@@ -22,10 +22,10 @@ export class ApiService {
     });
   }
 
-  getRandom(): Promise<any> {
+  getRandom(from?: number): Promise<any> {
     return new Promise(resolve => {
       let result;
-      this.http.get(`${this.url}/random`).subscribe(
+      this.http.get(`${this.url}/random?from=${from || 0}`).subscribe(
         success => result = success,
         err => result = err,
         () => {
@@ -35,12 +35,13 @@ export class ApiService {
     });
   }
 
-  getBasicSearch(query: string): Promise<any> {
+  getBasicSearch(query: string, from?: number): Promise<any> {
     return new Promise(resolve => {
       let result;
 
       let params = new HttpParams();
       params = params.append('query', query);
+      params = params.append('from', `${from || 0}`);
 
       this.http.get(`${this.url}/search`, { params }).subscribe(
         success => result = success,
