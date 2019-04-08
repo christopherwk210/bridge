@@ -82,7 +82,6 @@ export class DownloadService {
   }
 
   handleFinishedDownload(download: Download) {
-    console.log('downloaded', download);
     download.transfer = true;
     this.remoteService.sendIPC('download-finished', { remoteDownload: download, destination: this.settingsService.chartLibraryDirectory });
   }
