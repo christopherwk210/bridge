@@ -2,15 +2,17 @@ const request = require('request');
 const fs = require('fs');
 const path = require('path');
 
-class DownloadManager {
+export class DownloadManager {
+  onUpdateCallback;
+  currentDownloads = [];
+  requests = {};
+  lastID = 0;
+
   /**
-   * @param {Function} onUpdate Callback called whenever a download is added, updated, or finished
+   * @param onUpdate Callback called whenever a download is added, updated, or finished
    */
   constructor(onUpdate) {
     this.onUpdateCallback = onUpdate;
-    this.currentDownloads = [];
-    this.requests = {};
-    this.lastID = 0;
   }
 
   addDownload(data, outputDestination) {
@@ -18,7 +20,7 @@ class DownloadManager {
     const song = data.song;
     const artist = data.artist;
 
-    let currentDownload = { song, artist };
+    const currentDownload: any = { song, artist };
     let writeStream;
     const req = request.get(url);
 
@@ -67,5 +69,3 @@ class DownloadManager {
     this.requests[id].destroy();
   }
 }
-
-module.exports = DownloadManager;

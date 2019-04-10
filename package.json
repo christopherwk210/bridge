@@ -4,8 +4,10 @@
   "description": "A handy CloneHero library management tool with a built in Chorus client.",
   "scripts": {
     "ng": "ng",
-    "start": "node tools/process-manager.js",
-    "build": "ng build --prod --base-href=\"./\"",
+    "start": "npm run build.electron && node tools/process-manager.js",
+    "build": "ng build --prod --base-href=\"./\" && npm run build.electron",
+    "build.electron": "tsc --lib es2018,dom --outDir dist/bridge src/electron.ts",
+    "prod": "npm run build && electron ./dist/bridge",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -14,6 +16,7 @@
     "package.linux": "electron-packager ./dist/bridge bridge --arch=x64 --asar --out=./bin/linux --overwrite --platform=linux",
     "setup": "npm "
   },
+  "main": "./dist/bridge/electron.js",
   "private": true,
   "dependencies": {
     "@angular/animations": "~7.2.0",
@@ -24,10 +27,12 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
+    "browserify": "^16.2.3",
     "core-js": "^2.5.4",
     "jquery": "^3.3.1",
     "request": "^2.88.0",
     "rxjs": "~6.3.3",
+    "tsify": "^4.0.1",
     "tslib": "^1.9.0",
     "vivus": "^0.4.4",
     "zone.js": "~0.8.26"

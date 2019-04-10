@@ -1,16 +1,16 @@
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
+import * as fs from 'fs';
+import * as path from 'path';
+import * as util from 'util';
 
 const readdir = util.promisify(fs.readdir);
 const stat = util.promisify(fs.stat);
 
 /**
  * Recursive parallel directory walk
- * @param {string} directory Directory to walk through
+ * @param directory Directory to walk through
  */
-async function walk(directory) {
-  let results = {
+export async function walk(directory: string) {
+  const results = {
     name: '',
     path: directory,
     files: [],
@@ -22,8 +22,8 @@ async function walk(directory) {
   let files;
   try {
     files = await readdir(directory);
-  } catch(e) {
-    return { err: r };
+  } catch (e) {
+    return { err: e };
   }
 
   let fileLength = files.length;
@@ -35,15 +35,15 @@ async function walk(directory) {
 
     try {
       fileStats = await stat(absoluteFilePath);
-    } catch(e) {
-      return { err: r };
+    } catch (e) {
+      return { err: e };
     }
 
     if (fileStats && fileStats.isDirectory()) {
       const subResults = await walk(absoluteFilePath);
       if (subResults.err) return { err: subResults.err };
 
-      subResults.name = file
+      subResults.name = file;
       subResults.path = absoluteFilePath;
       results.directories.push(subResults.results);
 
@@ -73,5 +73,3 @@ async function walk(directory) {
     }
   }
 }
-
-module.exports = walk;

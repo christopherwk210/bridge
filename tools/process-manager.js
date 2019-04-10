@@ -60,7 +60,7 @@ let ng, electron;
 function createElectron() {
   console.log(`Launching Electron...${escapes.reset}`);
   
-  electron = spawn('electron', ['./src', '-dev']);
+  electron = spawn('electron', ['.', '-dev']);
 
   // Handle Electron outputs
   electron.stdout.on('data', data => console.log(`${escapes.cyan}Electron:\n${escapes.reset}${data}`));
