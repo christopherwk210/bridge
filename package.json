@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "npm run build.electron && node tools/process-manager.js",
     "build": "ng build --prod --base-href=\"./\" && npm run build.electron",
-    "build.electron": "tsc --lib es2018,dom --outDir dist/bridge src/electron.ts",
+    "build.electron": "tsc --lib es2018,dom --outDir dist/bridge --experimentalDecorators src/electron.ts",
     "prod": "npm run build && electron ./dist/bridge",
     "test": "ng test",
     "lint": "ng lint",
