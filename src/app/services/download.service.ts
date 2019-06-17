@@ -74,11 +74,11 @@ export class DownloadService {
   }
 
   handleTransferFailed(response: { data: RemoteDownload, msg: string }) {
-    console.log(response);
+    console.log('failed: ', response);
   }
 
   handleTransferCompleted(response: { data: RemoteDownload }) {
-    console.log(response);
+    console.log('completed: ', response);
   }
 
   handleFinishedDownload(download: Download) {

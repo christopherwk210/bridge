@@ -23,11 +23,13 @@ export class DownloadFinished implements IpcMainHandlerClass {
   }
 
   /**
-   * Wrapper for fs.access that resolves with the status as a boolean
+   * Wrapper for fs.access that resolves with the status as an inverted boolean
    */
   access(pathLike: fs.PathLike, mode: number) {
     return new Promise(resolve => {
-      fs.access(pathLike, mode, error => resolve(!!error));
+      fs.access(pathLike, mode, error => {
+        resolve(!error);
+      });
     });
   }
 
