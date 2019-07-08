@@ -1,4 +1,7 @@
 {
   "main": "electron.js",
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
 }
