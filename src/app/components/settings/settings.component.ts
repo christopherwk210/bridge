@@ -57,4 +57,7 @@ export class SettingsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  openLibraryDirectory() {
+    this.remoteService.remote.shell.showItemInFolder(this.settingService.chartLibraryDirectory);
+  }
 }
