@@ -18,4 +18,11 @@ export class DownloadsComponent implements OnInit {
     this.downloadService.removeFinishedDownload(id);
   }
 
+  clearDownloads() {
+    this.downloadService.currentDownloads.forEach(download => {
+      if (download.percent === 100) {
+        this.clearDownload(download.id);
+      }
+    });
+  }
 }

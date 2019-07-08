@@ -4,6 +4,11 @@
   overflow-y: scroll;
 }
 
+.download-controls {
+  justify-content: flex-end;
+  margin-bottom: 1em;
+}
+
 .no-downloads {
   font-size: 1.25em;
   opacity: 0.5;

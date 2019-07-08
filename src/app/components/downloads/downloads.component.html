@@ -2,6 +2,12 @@
   No active downloads!
 </div>
 
+<div class="flex-row download-controls" *ngIf="downloadService.currentDownloads.length">
+  <button class="ui green icon button" (click)="clearDownloads()">
+    <i class="check icon"></i> Clear all
+  </button>
+</div>
+
 <div class="segment-list" *ngIf="downloadService.currentDownloads.length">
   <div class="ui segment" *ngFor="let download of downloadService.currentDownloads">
     <h4>{{download.song}} <span style="opacity: 0.5">({{download.artist}})</span></h4>
