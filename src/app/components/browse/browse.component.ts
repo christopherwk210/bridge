@@ -123,6 +123,12 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
     const result = await this.api[method](this.settingsService.from);
 
+    if (!result.songs) {
+      // tslint:disable-next-line: max-line-length
+      this.remoteService.remote.dialog.showErrorBox('Ah dang...', 'I was not able to connect to the Chorus servers, so you won\'t be able to use this feature of bridge right now. Sorry, friend!')
+      return;
+    }
+
     // Save and sort the results
     if (from) {
       this.settingsService.browseCurrentSongResults.push(...result.songs);
