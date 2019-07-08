@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { RemoteService } from 'src/app/services/remote.service';
+import { RemoteService } from '../../services/remote.service';
+import { DownloadService } from '../../services/download.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -10,7 +11,7 @@ import { RemoteService } from 'src/app/services/remote.service';
 export class ToolbarComponent implements OnInit {
   currentRoute = '';
 
-  constructor(public router: Router, private remoteService: RemoteService) {
+  constructor(public router: Router, private remoteService: RemoteService, public downloadService: DownloadService) {
     router.events.subscribe(val => {
       if (val instanceof NavigationEnd) {
         this.currentRoute = val.url.replace('/', '');

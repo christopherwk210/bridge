@@ -1,6 +1,6 @@
 <div class="ui top fixed menu">
   <a class="item" [class.active]="currentRoute === ''" (click)="router.navigate(['/'])">Browse</a>
-  <a class="item" [class.active]="currentRoute === 'downloads'" (click)="router.navigate(['/downloads'])">Downloads</a>
+  <a class="item" [class.active]="currentRoute === 'downloads'" (click)="router.navigate(['/downloads'])">Downloads <a *ngIf="downloadService.currentDownloads.length" class="ui red mini label">{{downloadService.currentDownloads.length}}</a></a>
   <a class="item" [class.active]="currentRoute === 'library'" (click)="router.navigate(['/library'])">Library</a>
   <a class="item" [class.active]="currentRoute === 'settings'" (click)="router.navigate(['/settings'])">Settings</a>
   <a class="item" [class.active]="currentRoute === 'about'" (click)="router.navigate(['/about'])" style="margin-right:auto;">About</a>
