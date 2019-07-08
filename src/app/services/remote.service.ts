@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as electron from 'electron';
+import * as nodefs from 'fs';
+import * as nodepath from 'path';
+import * as nodeutil from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -8,11 +11,19 @@ export class RemoteService {
   electron: typeof electron;
   remote: typeof electron.remote;
   ipcRenderer: typeof electron.ipcRenderer;
+  fs: typeof nodefs;
+  path: typeof nodepath;
+  util: typeof nodeutil;
 
   constructor() {
     this.electron = this.require('electron');
     this.remote = this.electron.remote;
     this.ipcRenderer = this.electron.ipcRenderer;
+    this.fs = this.require('fs');
+    this.path = this.require('path');
+    this.util = this.require('util');
+
+    this.util.promisify(this.fs.readFile);
   }
 
   get currentWindow() {
@@ -54,5 +65,9 @@ export class RemoteService {
         resolve( paths );
       });
     });
+  }
+
+  get readFile() {
+    return this.util.promisify(this.fs.readFile);
   }
 }

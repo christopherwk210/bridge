@@ -4,8 +4,22 @@
   <p>Go to Settings to choose one.</p>
 </div>
 
-<div *ngIf="settingsService.chartLibraryDirectory" class="error-msg">
+<div *ngIf="settingsService.chartLibraryDirectory && !charts" class="error-msg">
   <p><i class="exclamation icon"></i></p>
   <p>You haven't scanned your library yet!</p>
   <p><button class="ui teal button" (click)="scanLibrary()">Scan Now</button></p>
+</div>
+
+<div *ngIf="scanning" class="error-msg">
+  <p><i class="exclamation icon"></i></p>
+  <p>Currently scanning library!</p>
+  <p>Please wait...</p>
+</div>
+
+<div *ngIf="charts && !scanning">
+  <div class="flex-row">
+    <button class="ui teal button" (click)="scanLibrary()">Scan Again</button>
+  </div>
+
+  <app-chart-item [data]="charts" mode="compact" (detailsClicked)="openFolder($event)"></app-chart-item>
 </div>

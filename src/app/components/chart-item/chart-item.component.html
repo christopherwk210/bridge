@@ -15,8 +15,8 @@
       <div class="extra"></div>
 
       <div class="buttons">
-        <button class="ui button" (click)="detailsClicked.emit(item)">Details</button>
-        <div class="ui vertical teal animated button" (click)="downloadClicked.emit(item)">
+        <button class="ui button" (click)="detailsClicked.emit(item)">{{item.LOCALDATA ? 'Open Folder' : 'Details'}}</button>
+        <div *ngIf="!item.LOCALDATA" class="ui vertical teal animated button" (click)="downloadClicked.emit(item)">
           <div class="hidden content"><i class="down arrow icon"></i></div>
           <div class="visible content">Add to library</div>
         </div>

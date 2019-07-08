@@ -12,6 +12,7 @@ interface LocalSettings {
   lastQuery: string;
   from: number;
   chartLibraryDirectory: string;
+  chartLibraryScan: any[];
   theme: string;
 }
 
@@ -112,6 +113,12 @@ export class SettingsService {
   set theme(newValue: string) {
     this.localSettings.theme = newValue;
     this.changeTheme(newValue);
+    this.saveSettings();
+  }
+
+  get chartLibraryScan() { return this.localSettings.chartLibraryScan; }
+  set chartLibraryScan(newValue: any[]) {
+    this.localSettings.chartLibraryScan = newValue;
     this.saveSettings();
   }
 }
