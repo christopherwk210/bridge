@@ -4,23 +4,10 @@ import * as path from 'path';
 
 // Local imports
 import { downloadManager } from './assets/electron/download-manager';
-import {
-  AddNewDownload,
-  DownloadFinished,
-  RequestInitialLoad,
-  RequestVersion,
-  SaveSettings,
-  ScanLibrary
-} from './assets/electron/ipc';
 
-const ipcHandlers = [
-  AddNewDownload,
-  DownloadFinished,
-  RequestInitialLoad,
-  RequestVersion,
-  SaveSettings,
-  ScanLibrary
-];
+// IPC handlers
+import * as IPCs from './assets/electron/ipc';
+const ipcHandlers = Object.values(IPCs).filter(item => typeof item === 'function');
 
 // Libraries
 import { app, BrowserWindow, ipcMain } from 'electron';

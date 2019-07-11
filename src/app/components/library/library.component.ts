@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../../services/settings.service';
 import { RemoteService } from '../../services/remote.service';
-import { SongResult } from '../../shared/interfaces/song-result.interface';
+import { LibraryService } from '../../services/library.service';
 import * as ini from 'ini';
 
 interface SimpleResult {
@@ -20,11 +20,31 @@ export class LibraryComponent implements OnInit {
   charts: any[];
   scanning = false;
 
-  constructor(public settingsService: SettingsService, private remoteService: RemoteService) {
-    if (this.settingsService.chartLibraryScan) this.charts = this.settingsService.chartLibraryScan;
+  skip = 0;
+  limit = 10;
+  max = false;
+
+  constructor(public settingsService: SettingsService, private remoteService: RemoteService, private libraryService: LibraryService) {
+    this.getNextSongBatch();
   }
 
   ngOnInit() {
+  }
+
+  async getNextSongBatch() {
+    const songs = await this.libraryService.getLibraryItems(this.skip, this.limit);
+
+    if (songs.length === 0) return;
+
+    if (songs.length < this.limit) {
+      this.max = true;
+    } else if (songs.length === this.limit) {
+      this.skip += this.limit;
+    }
+
+    if (!this.charts) this.charts = [];
+
+    this.charts.push(...songs);
   }
 
   async scanLibrary() {
@@ -80,8 +100,8 @@ export class LibraryComponent implements OnInit {
       }
     }
 
-    // Step 4: Convert parsed result into song results
-    this.charts = parsedData.map(song => {
+    // Step 4: Convert parsed result into song results and store
+    for (const song of parsedData) {
       const songResult = {
         LOCALDATA: true,
         name: song['name'],
@@ -95,12 +115,13 @@ export class LibraryComponent implements OnInit {
         localPath: song.localPath
       };
 
-      return songResult;
-    });
+      const addResult = await this.libraryService.addLibraryItem(songResult);
+      if (!addResult) {
+        console.log('Failed to add', songResult);
+      }
+    }
 
-    // Save settings
-    this.settingsService.chartLibraryScan = this.charts;
-
+    this.getNextSongBatch();
     this.scanning = false;
   }
 

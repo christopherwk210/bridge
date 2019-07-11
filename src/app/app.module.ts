@@ -7,6 +7,7 @@ import { ApiService } from './services/api.service';
 import { RemoteService } from './services/remote.service';
 import { SettingsService } from './services/settings.service';
 import { DownloadService } from './services/download.service';
+import { LibraryService } from './services/library.service';
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
@@ -41,7 +42,8 @@ import { ModalComponent } from './components/modal/modal.component';
     ApiService,
     RemoteService,
     SettingsService,
-    DownloadService
+    DownloadService,
+    LibraryService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, NgZone, ViewChild, ElementRef } from '@angular/core';
 import { SettingsService } from 'src/app/services/settings.service';
 import { RemoteService } from 'src/app/services/remote.service';
+import { LibraryService } from 'src/app/services/library.service';
 import { $ } from '../../shared/globals';
 
 @Component({
@@ -13,7 +14,12 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
   cacheSize = 'Calculating...';
 
-  constructor(public settingService: SettingsService, private remoteService: RemoteService, private zone: NgZone) { }
+  constructor(
+    public settingService: SettingsService,
+    private remoteService: RemoteService,
+    private libraryService: LibraryService,
+    private zone: NgZone
+  ) {}
 
   async ngOnInit() {
     const size = await this.getCacheSize();
@@ -38,9 +44,13 @@ export class SettingsComponent implements OnInit, AfterViewInit {
 
   clearCache() {
     this.cacheSize = 'Please wait...';
-    this.remoteService.remote.session.defaultSession.clearCache(() => {
-      // Remote service callbacks are executed outside of zone, which Angular can't see
-      this.zone.run(() => this.cacheSize = 'Cleared!');
+
+    this.settingService.saveSettings();
+    this.libraryService.clearLibrary().then(cleared => {
+      this.remoteService.remote.session.defaultSession.clearCache(() => {
+        // Remote service callbacks are executed outside of zone, which Angular can't see
+        this.zone.run(() => this.cacheSize = 'Cleared!');
+      });
     });
   }
 
