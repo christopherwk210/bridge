@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { SettingsService } from '../../services/settings.service';
 import { RemoteService } from '../../services/remote.service';
 import { LibraryService } from '../../services/library.service';
@@ -24,11 +24,25 @@ export class LibraryComponent implements OnInit {
   limit = 10;
   max = false;
 
+  scrollBottomPadding = 50;
+  canLoadScroll = true;
+
   constructor(public settingsService: SettingsService, private remoteService: RemoteService, private libraryService: LibraryService) {
     this.getNextSongBatch();
   }
 
   ngOnInit() {
+  }
+
+  @HostListener('scroll', ['$event'])
+  handleScroll(e: Event) {
+    const element = e.target as HTMLElement;
+    if (!this.max && this.canLoadScroll && element.scrollTop + element.offsetHeight > element.scrollHeight - this.scrollBottomPadding) {
+      this.canLoadScroll = false;
+      this.getNextSongBatch().then(() => {
+        this.canLoadScroll = true;
+      });
+    }
   }
 
   async getNextSongBatch() {
