@@ -1,12 +1,13 @@
 {
   "name": "bridge",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A handy CloneHero library management tool with a built in Chorus client.",
   "scripts": {
     "ng": "ng",
     "start": "npm run build.electron && node tools/process-manager.js",
     "build": "ng build --prod --base-href=\"./\" && npm run build.electron",
     "build.electron": "tsc --lib es2018,dom --outDir dist/bridge --experimentalDecorators src/electron.ts",
+    "build.all": "npm run build && npm run package.win && npm run package.mac && npm run package.linux",
     "prod": "npm run build && electron ./dist/bridge",
     "test": "ng test",
     "lint": "ng lint",
