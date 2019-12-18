@@ -18,13 +18,13 @@ import { RemoteService } from 'src/app/services/remote.service';
   styleUrls: ['./browse.component.scss']
 })
 export class BrowseComponent implements OnInit, AfterViewInit {
-  @ViewChild('uiCompactBtn') uiCompactBtn: ElementRef;
-  @ViewChild('uiDetailBtn') uiDetailBtn: ElementRef;
-  @ViewChild('uiGridBtn') uiGridBtn: ElementRef;
-  @ViewChild('uiRandomBtn') uiRandomBtn: ElementRef;
-  @ViewChild('uiSortDropdown') uiSortDropdown: ElementRef;
-  @ViewChild('uiNewestBtn') uiNewestBtn: ElementRef;
-  @ViewChild('modal') modal: ModalComponent;
+  @ViewChild('uiCompactBtn', { static: true }) uiCompactBtn: ElementRef;
+  @ViewChild('uiDetailBtn', { static: true }) uiDetailBtn: ElementRef;
+  @ViewChild('uiGridBtn', { static: true }) uiGridBtn: ElementRef;
+  @ViewChild('uiRandomBtn', { static: true }) uiRandomBtn: ElementRef;
+  @ViewChild('uiSortDropdown', { static: true }) uiSortDropdown: ElementRef;
+  @ViewChild('uiNewestBtn', { static: true }) uiNewestBtn: ElementRef;
+  @ViewChild('modal', { static: true }) modal: ModalComponent;
 
   loading: boolean;
   sortTypeReadables = sortTypeReadable;

@@ -8,7 +8,7 @@ import { SettingsService } from 'src/app/services/settings.service';
   styleUrls: ['./app-loading.component.scss']
 })
 export class AppLoadingComponent implements AfterViewInit, OnInit {
-  @ViewChild('logo') logo: ElementRef;
+  @ViewChild('logo', { static: true }) logo: ElementRef;
   @Output() done: EventEmitter<boolean> = new EventEmitter();
   logoVivus: any;
 

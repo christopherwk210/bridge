@@ -10,7 +10,7 @@ import { $ } from '../../shared/globals';
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, AfterViewInit {
-  @ViewChild('uiThemeDropdown') themeDropdown: ElementRef;
+  @ViewChild('uiThemeDropdown', { static: true }) themeDropdown: ElementRef;
 
   cacheSize = 'Calculating...';
 

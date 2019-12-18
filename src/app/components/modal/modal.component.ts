@@ -18,7 +18,7 @@ export class ModalComponent implements AfterViewInit, OnDestroy {
   @Input() icon: string;
   @Input() size: 'mini' | 'tiny' | 'small' | 'large';
   @Input() closable = true;
-  @ViewChild('modal') modal: ElementRef;
+  @ViewChild('modal', { static: true }) modal: ElementRef;
 
   actionList: ActionButtonList[];
   remoteResolve: (value?: {} | PromiseLike<{}>) => void;
