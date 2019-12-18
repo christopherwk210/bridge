@@ -1,5 +1,5 @@
 // Import package for versioning
-const pkg = require('../../../package.json');
+import * as pkg from '../../../package.json';
 
 import { IpcMainHandler, IpcMainHandlerClass, IpcMessageEvent } from '../shared/ipc-main-handler';
 
