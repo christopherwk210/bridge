@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SettingsService } from '../../services/settings.service';
 import { DownloadService } from '../../services/download.service';
+import { DownloadState } from 'src/app/shared/interfaces/download.interface';
 
 @Component({
   selector: 'app-downloads',
@@ -8,6 +9,7 @@ import { DownloadService } from '../../services/download.service';
   styleUrls: ['./downloads.component.scss']
 })
 export class DownloadsComponent implements OnInit {
+  DownloadState = DownloadState
 
   constructor(public settingsService: SettingsService, public downloadService: DownloadService) { }
 
@@ -15,12 +17,12 @@ export class DownloadsComponent implements OnInit {
   }
 
   clearDownload(id: number) {
-    this.downloadService.removeFinishedDownload(id);
+    this.downloadService.removeDownload(id);
   }
 
   clearDownloads() {
     this.downloadService.currentDownloads.forEach(download => {
-      if (download.percent === 100) {
+      if (download.state == DownloadState.finished) {
         this.clearDownload(download.id);
       }
     });

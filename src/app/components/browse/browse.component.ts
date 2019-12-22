@@ -11,6 +11,7 @@ import * as sortFunctions from '../../shared/song-result-sorts';
 
 import { ModalComponent } from '../modal/modal.component';
 import { RemoteService } from 'src/app/services/remote.service';
+import { AddNewDownloadData } from 'src/app/shared/interfaces/download.interface';
 
 @Component({
   selector: 'app-browse',
@@ -191,15 +192,15 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
       if (response === 1) this.router.navigate(['/settings']);
     } else {
-      if (!song.directLinks['archive'])
       Object.keys(song.directLinks).forEach(link => {
-        if (link === 'archive') return;
-
         this.remoteService.sendIPC('add-new-download', {
           song: song.name,
           artist: song.artist,
-          link: song.directLinks[link]
-        });
+          charter: song.charter,
+          link: song.directLinks[link],
+          isArchive: !!song.directLinks.archive,
+          destination: this.settingsService.chartLibraryDirectory
+        } as AddNewDownloadData);
       });
     }
   }

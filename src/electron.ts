@@ -60,8 +60,9 @@ app.on('ready', () => {
   };
 
   // Configure download manager with an IPC callback message
-  downloadManager.onUpdateCallback = currentDownloads => mainWindow.webContents.send('downloads-updated', currentDownloads);
-
+  downloadManager.onStartCallback = download => mainWindow.webContents.send('download-started', download);
+  downloadManager.onUpdateCallback = updateData => mainWindow.webContents.send('download-updated', updateData);
+  
   ipcHandlers.forEach((Handler: any) => {
     const handler = new Handler(mainWindow);
     ipcMain.addListener(Handler.prototype._options.event, (event, ...data) => handler.action(event, ...data));
