@@ -1,9 +1,9 @@
-import * as request from 'request';
+import * as needle from 'needle';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 import * as extract from 'extract-zip';
-import { AddNewDownloadData, Download, DownloadState, UpdateDownloadData } from '../../app/shared/interfaces/download.interface';
+import { AddNewDownloadData, Download, DownloadState } from '../../app/shared/interfaces/download.interface';
 let sanitize = require('sanitize-filename');
 
 // Asyncification
@@ -15,60 +15,127 @@ const readdir = util.promisify(fs.readdir);
 
 class DownloadManager {
   onStartCallback: (currentDownload: Download) => void;
-  onUpdateCallback: (data: UpdateDownloadData) => void;
+  onUpdateCallback: (currentDownload: Download) => void;
   private requests = {};
   private lastID = 0;
+  private libraryFolder: string;
 
-  private updateState(download: Download, newState: DownloadState, errorMessage?: string) {
+  private updateState(download: Download, newState: DownloadState) {
     download.state = newState;
-    if (errorMessage == undefined) {
-      this.onUpdateCallback(download);
+    this.onUpdateCallback(download);
+  }
+
+  async addDownload(data: AddNewDownloadData, tempFolder: string) {
+    this.libraryFolder = data.destination;
+
+    let currentDownload: Download = {
+      id: ++this.lastID,
+      state: DownloadState.waitingForResponse,
+      url: data.link,
+      song: data.song,
+      artist: data.artist,
+      charter: data.charter,
+      isArchive: data.isArchive,
+      fileName: '',
+      fileType: '',
+      fileSize: '',
+      downloaded: 0,
+      percent: 0,
+      tempFolder: path.join(tempFolder, this.sanitizeFilename(`${data.artist} - ${data.song} (${data.charter})`))
+    };
+
+    this.onStartCallback(currentDownload);
+
+    this.requestDownload(currentDownload);
+  }
+
+  private requestDownload(currentDownload: Download, cookieHeader?: string) {
+    const req = needle.get(currentDownload.url, {
+      follow_max: 10,
+      headers: (cookieHeader ? { 'Cookie': cookieHeader } : undefined)
+    });
+
+    req.on('header', (statusCode, headers: Headers) => {
+      if (statusCode != 200) {
+        currentDownload.errorMessage = `Failed to download chart: request to [${currentDownload.url}] returned status code ${statusCode}.`;
+        this.updateState(currentDownload, DownloadState.failedToRespond);
+        return;
+      }
+
+      currentDownload.fileType = headers['content-type'];
+      if (currentDownload.fileType.startsWith('text/html')) {
+        console.log('REQUEST RETURNED HTML');
+        this.handleHTMLResponse(req, currentDownload, headers['set-cookie']);
+      } else {
+        console.log(`REQUEST RETURNED FILE DOWNLOAD (x-goog-hash=[${headers['x-goog-hash']}])`);
+        currentDownload.fileName = this.getDownloadFileName(currentDownload.url, headers);
+        currentDownload.fileType = headers['content-type'];
+        currentDownload.fileSize = headers['content-length'];
+        this.updateState(currentDownload, DownloadState.download);
+        this.handleDownloadResponse(req, currentDownload, headers);
+      }
+    });
+  }
+
+  private getDownloadFileName(url: string, headers: Headers) {
+    if (headers['server'] && headers['server'] === 'cloudflare') {
+      // Cloudflare specific jazz
+      return this.sanitizeFilename(decodeURIComponent(path.basename(url)));
     } else {
-      this.onUpdateCallback(Object.assign({ errorMessage }, download));
+      // GDrive specific jazz
+      const filenameRegex = /filename="(.*?)"/g;
+      let results = filenameRegex.exec(headers['content-disposition']);
+      if (results == null) {
+        console.log(`Warning: couldn't find filename in content-disposition header: [${headers['content-disposition']}]`);
+        return 'unknownFilename';
+      } else {
+        return this.sanitizeFilename(results[1]);
+      }
     }
   }
 
-  addDownload(data: AddNewDownloadData, tempFolder: string) {
-    const req = request.get(data.link);
-    const downloadID = ++this.lastID;
-    let currentDownload: Download;
-
-    req.on('response', res => {
-      const filenameRegex = /filename="([^"]+)"/g;
-
-      this.requests[downloadID] = req;
-
-      let fileName: string;
-      if (res.headers['server'] && res.headers['server'] === 'cloudflare') {
-        // Cloudflare specific jazz
-        fileName = this.sanitizeFilename(decodeURIComponent(path.basename(data.link)));
+  private handleHTMLResponse(req: NodeJS.ReadableStream, currentDownload: Download, cookieHeader: string) {
+    // The response returned the google drive "couldn't scan for viruses" page
+    let virusScanHTML = '';
+    req.on('data', data => virusScanHTML += data);
+    req.on('done', (err) => {
+      if (err) {
+        currentDownload.errorMessage = `Failed to download chart: couldn't load the google HTML response: ${err}`;
+        this.updateState(currentDownload, DownloadState.downloadFailed);
       } else {
-        // GDrive specific jazz
-        fileName = this.sanitizeFilename(filenameRegex.exec(res.headers['content-disposition'])[1]);
+        const confirmTokenRegex = /confirm=([0-9A-Za-z]+)&/g;
+        const confirmTokenResults = confirmTokenRegex.exec(virusScanHTML);
+        if (confirmTokenResults == null) {
+          currentDownload.errorMessage = `Failed to download chart: invalid HTML response; couldn't find confirm token.`;
+          this.updateState(currentDownload, DownloadState.downloadFailed);
+        } else {
+          const confirmToken = confirmTokenResults[1];
+          const downloadID = currentDownload.url.substr(currentDownload.url.indexOf('id=') + 'id='.length);
+          currentDownload.url = `https://drive.google.com/uc?confirm=${confirmToken}&id=${downloadID}`;
+          console.log(`NEW LINK: ${currentDownload.url}`);
+          console.log(`COOKIE HEADER: [${cookieHeader}]`);
+          this.requestDownload(currentDownload, cookieHeader);
+        }
       }
-
-      const writeStream = fs.createWriteStream(
-        path.join(tempFolder, fileName)
-      );
-      req.pipe(writeStream);
-
-      currentDownload = {
-        id: downloadID,
-        state: DownloadState.download,
-        url: data.link,
-        song: data.song,
-        artist: data.artist,
-        charter: data.charter,
-        isArchive: data.isArchive,
-        fileName: fileName,
-        fileType: res.headers['content-type'],
-        fileSize: res.headers['content-length'],
-        downloaded: 0,
-        percent: 0
-      };
-
-      this.onStartCallback(currentDownload);
     });
+  }
+
+  private async handleDownloadResponse(req: NodeJS.ReadableStream, currentDownload: Download, headers: Headers) {
+    // The response should be a file download
+    this.requests[currentDownload.id] = req;
+
+    const tempFolderExists = await this.access(currentDownload.tempFolder, fs.constants.F_OK);
+    if (!tempFolderExists) {
+      try {
+        await mkdir(currentDownload.tempFolder);
+      } catch (err) {
+        currentDownload.errorMessage = `Failed to download chart: failed to create temporary directory: ${err}`;
+        this.updateState(currentDownload, DownloadState.downloadFailed);
+        return;
+      }
+    }
+    const filePath = path.join(currentDownload.tempFolder, currentDownload.fileName);
+    req.pipe(fs.createWriteStream(filePath));
 
     req.on('data', chunk => {
       currentDownload.downloaded += chunk.length;
@@ -78,114 +145,79 @@ class DownloadManager {
     req.on('end', async () => {
       if (currentDownload.isArchive) {
         this.updateState(currentDownload, DownloadState.extract);
-        await this.extractDownload(currentDownload, tempFolder);
+        await this.extractDownload(currentDownload);
       }
 
       if (currentDownload.state != DownloadState.extractFailed) {
         this.updateState(currentDownload, DownloadState.transfer);
-        if (currentDownload.isArchive) {
-          this.transferArchive(currentDownload, tempFolder, data.destination);
-        } else {
-          this.transferDownload(currentDownload, tempFolder, data.destination);
-        }
+        this.transferDownload(currentDownload);
       }
     });
   }
 
   cancelDownload(id: string) { //TODO: add ui to call this?
-    this.requests[id].destroy();
+    this.requests[id].destroy(); // This won't work with needle requests
   }
 
-  async extractDownload(download: Download, tempFolder: string) {
-    const source = path.join(tempFolder, download.fileName);
-    const destination = path.join(tempFolder, String(download.id));
+  private async extractDownload(download: Download) {
+    const source = path.join(download.tempFolder, download.fileName);
     return new Promise<void>((resolve) => {
-      extract(source, { dir: destination }, (err) => {
+      extract(source, { dir: download.tempFolder }, async (err) => {
         if (err) {
-          this.updateState(download, DownloadState.extractFailed, `Failed to extract the downloaded file: ${err}`);
+          //TODO: this fails too often with valid .zip/.rar files
+          download.errorMessage = `Failed to extract the downloaded file: ${err}`;
+          this.updateState(download, DownloadState.extractFailed);
+        } else {
+          try {
+            await unlink(source);
+          } catch (err) {
+            download.errorMessage = `Failed to extract the downloaded file: ${err}`;
+            this.updateState(download, DownloadState.extractFailed);
+          }
         }
+
         resolve();
       });
     });
   }
 
-  async transferArchive(download: Download, tempFolder: string, destination: string) {
-    let tempFolderPath = path.join(tempFolder, String(download.id));
-    const destinationFolder = path.join(destination, this.sanitizeFilename(`${download.artist} - ${download.song} (${download.charter})`));
-
-    // Check if the destination folder exists
-    const destinationFolderExists = await this.access(destinationFolder, fs.constants.F_OK);
-
+  private async transferDownload(download: Download) {
     try {
-      if (destinationFolderExists) {
-        this.updateState(download, DownloadState.transferFailed, 'A folder for this chart already exists in the target directory.');
-        return;
-      } else {
-        // Create the destination folder if it doesn't exist
+      const destinationFolder = path.join(this.libraryFolder, path.basename(download.tempFolder));
+
+      // Create the destination folder if it doesn't exist
+      const destFolderExists = await this.access(destinationFolder, fs.constants.F_OK);
+      if (!destFolderExists) {
         await mkdir(destinationFolder);
+      }
+
+      let files = (download.isArchive ? await readdir(download.tempFolder) : [download.fileName]);
+      // If the chart folder is in the archive folder, rather than the chart files
+      const isFolderArchive = (files.length < 2 && !fs.lstatSync(path.join(download.tempFolder, files[0])).isFile());
+      if (download.isArchive && isFolderArchive) {
+        download.tempFolder = path.join(download.tempFolder, files[0]);
+        files = await readdir(download.tempFolder);
       }
 
       // Copy the files from the temporary directory to the destination
-      let files = await readdir(tempFolderPath);
-      // If the chart folder is in the archive folder, rather than the chart files
-      const isFolderArchive = (files.length < 2 && !fs.lstatSync(path.join(tempFolderPath, files[0])).isFile());
-      if (isFolderArchive) {
-        tempFolderPath = path.join(tempFolderPath, files[0]);
-        files = await readdir(tempFolderPath);
-      }
       for (const file of files) {
-        await copyFile(path.join(tempFolderPath, file), path.join(destinationFolder, file));
-        await unlink(path.join(tempFolderPath, file));
+        await copyFile(path.join(download.tempFolder, file), path.join(destinationFolder, file));
+        await unlink(path.join(download.tempFolder, file));
       }
 
-      // Delete the folder from the temporary directory
+      // Delete the extracted folder from the temporary directory
       if (isFolderArchive) {
-        await rmdir(tempFolderPath);
+        await rmdir(download.tempFolder);
       }
-      await rmdir(path.join(tempFolder, String(download.id)));
 
       this.updateState(download, DownloadState.finished);
-    } catch (error) {
-      this.updateState(download, DownloadState.transferFailed, `Copying the downloaded file to the target directory failed: ${error}`);
+    } catch (err) {
+      download.errorMessage = `Copying the downloaded file to the target directory failed: ${err}`;
+      this.updateState(download, DownloadState.transferFailed);
     }
   }
 
-  async transferDownload(download: Download, tempFolder: string, destination: string) {
-    const tempFilePath = path.join(tempFolder, download.fileName);
-    const destinationFolder = path.join(destination, this.sanitizeFilename(`${download.artist} - ${download.song} (${download.charter})`));
-    const destinationFile = path.join(destinationFolder, download.fileName);
-
-    // Check if the destination folder exists
-    const destinationFolderExists = await this.access(destinationFolder, fs.constants.F_OK);
-
-    try {
-      if (destinationFolderExists) {
-        // Check if the destination file already exists somehow
-        const destinationFileExists = await this.access(destinationFile, fs.constants.F_OK);
-
-        // Short circuit if it does exist
-        if (destinationFileExists) {
-          this.updateState(download, DownloadState.transferFailed, 'The downloaded file already exists in the target directory.');
-          return;
-        }
-      } else {
-        // Create the destination folder if it doesn't exist
-        await mkdir(destinationFolder);
-      }
-
-      // Copy the file from the temporary directory to the destination
-      await copyFile(tempFilePath, destinationFile);
-
-      // Delete the file from the temporary directory
-      await unlink(tempFilePath);
-
-      this.updateState(download, DownloadState.finished);
-    } catch (error) {
-      this.updateState(download, DownloadState.transferFailed, `Copying the downloaded file to the target directory failed: ${error}`);
-    }
-  }
-
-  access(pathLike: fs.PathLike, mode: number) {
+  private access(pathLike: fs.PathLike, mode: number) {
     return new Promise(resolve => {
       fs.access(pathLike, mode, error => {
         resolve(!error);
@@ -193,7 +225,7 @@ class DownloadManager {
     });
   }
 
-  sanitizeFilename(filename: string): string {
+  private sanitizeFilename(filename: string): string {
     const newName = sanitize(filename, {
       replacement: ((invalidChar: string) => {
         switch (invalidChar) {

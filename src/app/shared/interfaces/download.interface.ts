@@ -1,5 +1,8 @@
 export enum DownloadState {
+  waitingForResponse,
+  failedToRespond,
   download,
+  downloadFailed,
   extract,
   extractFailed,
   transfer,
@@ -29,11 +32,6 @@ export interface Download {
   fileSize?: string
   downloaded: number
   percent: number
-}
-
-export interface UpdateDownloadData {
-  id: number
-  state: DownloadState
-  downloaded: number
   errorMessage?: string
+  tempFolder: string
 }

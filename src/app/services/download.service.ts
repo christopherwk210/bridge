@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
 import { RemoteService } from './remote.service';
-import { Download, UpdateDownloadData, DownloadState } from '../shared/interfaces/download.interface';
+import { Download, DownloadState } from '../shared/interfaces/download.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +21,19 @@ export class DownloadService {
     });
   }
 
-  handleDownloadUpdated(updateData: UpdateDownloadData) {
+  handleDownloadUpdated(download: Download) {
     this.zone.run(() => {
-      const currentDownload = this.currentDownloads.find(download => download.id == updateData.id);
+      const currentDownload = this.currentDownloads.find(download1 => download1.id == download.id);
       if (currentDownload != undefined) {
-        currentDownload.state = updateData.state;
+        currentDownload.state = download.state;
         switch(currentDownload.state) {
           case DownloadState.download:
-            currentDownload.downloaded = updateData.downloaded;
+            currentDownload.downloaded = download.downloaded;
             currentDownload.percent = this.downloadPercent(currentDownload);
             break;
           case DownloadState.extractFailed:
           case DownloadState.transferFailed:
-            console.log('failed: ', updateData.errorMessage);
+            console.log('failed: ', download.errorMessage);
             break;
           case DownloadState.finished:
             console.log(`Downloaded "${currentDownload.artist} - ${currentDownload.song} (${currentDownload.charter})"`);
