@@ -23,6 +23,14 @@ export class LibraryService {
     });
   }
 
+  removeLibraryItem(document): Promise<boolean> {
+    return new Promise(resolve => {
+      this.remoteService.talkIPC('library-remove-item-response', 'library-remove-item', document).then(res => {
+        resolve(res.args[0]);
+      });
+    });
+  }
+
   clearLibrary(): Promise<boolean> {
     return new Promise(resolve => {
       this.remoteService.talkIPC('library-clear-response', 'library-clear').then(res => {

@@ -11,7 +11,9 @@ export class ChartItemComponent implements OnInit {
   @Input() data: SongResult[];
 
   @Output() detailsClicked: EventEmitter<SongResult> = new EventEmitter();
+  @Output() previewClicked: EventEmitter<SongResult> = new EventEmitter();
   @Output() downloadClicked: EventEmitter<SongResult> = new EventEmitter();
+  @Output() deleteClicked: EventEmitter<SongResult> = new EventEmitter();
 
   constructor() { }
 

@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { SettingsService } from '../../services/settings.service';
 import { RemoteService } from '../../services/remote.service';
 import { LibraryService } from '../../services/library.service';
+import { PlaybackService } from '../../services/playback.service';
 import * as ini from 'ini';
 
 interface SimpleResult {
@@ -27,7 +28,7 @@ export class LibraryComponent implements OnInit {
   scrollBottomPadding = 50;
   canLoadScroll = true;
 
-  constructor(public settingsService: SettingsService, private remoteService: RemoteService, private libraryService: LibraryService) {
+  constructor(public settingsService: SettingsService, private remoteService: RemoteService, private libraryService: LibraryService, private playbackService: PlaybackService) {
     this.getNextSongBatch();
   }
 
@@ -62,6 +63,7 @@ export class LibraryComponent implements OnInit {
   }
 
   async scanLibrary() {
+    this.charts = [];
     const shouldContinue = await new Promise(resolve => {
       this.remoteService.remote.dialog.showMessageBox(
         this.remoteService.currentWindow,
@@ -142,5 +144,23 @@ export class LibraryComponent implements OnInit {
   openFolder(e) {
     this.remoteService.remote.shell.showItemInFolder(e.localPath);
   }
+
+  async deleteFile(e) {
+    var success = await this.remoteService.remote.shell.moveItemToTrash(e.localPath);
+    if(success){
+      this.scanLibrary();
+      //todo: why is this not working?
+      //const removeResult = await this.libraryService.removeLibraryItem(e);
+      //var index = this.charts.indexOf(e);
+      //this.charts.splice(index, 1);  
+    }
+  }
+
+  previewSong(e){
+    //console.log(e.localPath+"/song.ogg");
+
+    this.playbackService.playSong(e);
+  }
+
 
 }
