@@ -21,5 +21,5 @@
     <button class="ui teal button" (click)="scanLibrary()">Scan Again</button>
   </div>
 
-  <app-chart-item [data]="charts" mode="compact" (detailsClicked)="openFolder($event)"></app-chart-item>
+  <app-chart-item [data]="charts" mode="compact" (detailsClicked)="openFolder($event)" (deleteClicked)="deleteFile($event)" (previewClicked)="previewSong($event)"></app-chart-item>
 </div>

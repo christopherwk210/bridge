@@ -6,6 +6,7 @@
       <div class="meta">
         <p><strong>{{item.artist}}</strong> <span *ngIf="item.album">- {{item.album}}</span> <span *ngIf="item.year && item.year.trim()">({{item.year}})</span></p>
         <p style="margin-top: 0.5em;">Charted by {{item.charter}}</p>
+
       </div>
 
       <div class="description">
@@ -16,6 +17,11 @@
 
       <div class="buttons">
         <button class="ui button" (click)="detailsClicked.emit(item)">{{item.LOCALDATA ? 'Open Folder' : 'Details'}}</button>
+        <button class="ui positive toggle button" (click)="previewClicked.emit(item)">Preview</button>
+        <div *ngIf="item.LOCALDATA" class="ui vertical negative animated button" (click)="deleteClicked.emit(item)">
+          <div class="hidden content"><i class="trash icon"></i></div>
+          <div class="visible content">Delete</div>
+        </div>
         <div *ngIf="!item.LOCALDATA" class="ui vertical teal animated button" (click)="downloadClicked.emit(item)">
           <div class="hidden content"><i class="down arrow icon"></i></div>
           <div class="visible content">Add to library</div>
